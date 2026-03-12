@@ -1,0 +1,62 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<IncludeBuildOutput>true</IncludeBuildOutput>
+		<DevelopmentDependency>true</DevelopmentDependency>
+		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+
+		<!-- Source Link support -->
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<RepositoryUrl>https://github.com/yourusername/FluentBuilder.Generator</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="bin\**" />
+	  <EmbeddedResource Remove="bin\**" />
+	  <None Remove="bin\**" />
+	</ItemGroup>
+
+		
+	<ItemGroup>
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" PrivateAssets="all" />
+		<PackageReference Include="System.Composition" Version="10.0.3" PrivateAssets="all" />
+		<!-- Match the version that Microsoft.CodeAnalysis.CSharp 5.0.0 expects -->
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.0.0" PrivateAssets="all" />
+		<!-- Source Link package -->
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.103" PrivateAssets="all" />
+
+		<!-- These are transitively referenced by Microsoft.CodeAnalysis.CSharp 5.0.0 -->
+		<!-- Include them explicitly with correct versions to avoid downgrade warnings -->
+		<PackageReference Include="System.Buffers" Version="4.6.1" PrivateAssets="all" />
+		<PackageReference Include="System.Memory" Version="4.6.3" PrivateAssets="all" />
+		<PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="5.0.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Features" Version="5.0.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Features" Version="5.0.0" PrivateAssets="all" />
+	</ItemGroup>
+
+		
+	<ItemGroup>
+	  <ProjectReference Include="..\FluentBuilder.Generator.Analyzers\FluentBuilder.Generator.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+	</ItemGroup>
+
+	<!-- Ensure all dependencies are included in the build output -->
+	<PropertyGroup>
+		<!--<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>-->
+	</PropertyGroup>
+
+	<!-- The generator will be referenced as an analyzer
+	<ItemGroup>
+		<None Include="$(OutputPath)\$(AssemblyName).dll" Link="analyzers\dotnet\cs\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+	</ItemGroup> -->
+
+</Project>

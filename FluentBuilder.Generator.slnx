@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="FluentBuilder.Generator.Analyzers/FluentBuilder.Generator.Analyzers.csproj" Id="abdddc18-4539-44cd-8639-f3385d340f95" />
+  <Project Path="FluentBuilder.Generator.Demo/FluentBuilder.Generator.Demo.csproj" />
+  <Project Path="FluentBuilder.Generator.Test/FluentBuilder.Generator.Test.csproj" />
+  <Project Path="FluentBuilder.Generator/FluentBuilder.Generator.csproj" />
+</Solution>
