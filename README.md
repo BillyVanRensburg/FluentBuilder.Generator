@@ -594,6 +594,21 @@ If the generated builder’s name clashes with an already defined type, the comp
 **How to fix:**  
 Use the `[FluentName]` attribute on your class to specify a different, unique name for the builder. For example, `[FluentName("CustomBuilder")]`. If a custom namespace is set via `BuilderNamespace`, ensure that the name is unique in that namespace.
 
+### FBBLD0007: Builder accessibility incompatible with constructor accessibility
+**Severity:** Error  
+**Category:** FluentBuilder  
+
+**Description:**  
+The builder accessibility specified on the `[FluentBuilder]` attribute is more permissive than any accessible constructor of the target type. In this situation the generated builder would not be able to instantiate the type.
+
+**Why this rule exists:**  
+The generated builder must be able to create instances of the target type. If the builder is more accessible than all of the type's constructors (for example the builder is `public` but all constructors are `private`), instantiation will fail at compile time or runtime. This analyzer catches the mismatch early.
+
+**How to fix:**  
+- Make at least one constructor of the target type accessible to the builder (e.g., add an `internal` or `public` constructor).  
+- Or reduce the builder's accessibility via the `BuilderAccessibility` named argument on `[FluentBuilder]` so it is not more permissive than the available constructors.  
+- Alternatively, provide a public static factory method and point the generator at it using `[FluentBuilderFactoryMethod("MethodName")]`; the generator can use that factory instead of calling a constructor.  
+- Note: records with a primary constructor are assumed to have an accessible constructor and are exempt from this diagnostic.
 ## Conclusion
 The FluentBuilder source generator provides a comprehensive, attribute‑driven way to create expressive, type‑safe builders for your C# types. With support for validation, async, collections, and deep customisation, it fits a wide range of scenarios.
 
