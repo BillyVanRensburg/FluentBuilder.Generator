@@ -10,6 +10,7 @@
 
 using FluentBuilder.Generator.Caching;
 using FluentBuilder.Generator.Parameters;
+using System;
 using System.Linq;
 using System.Text;
 
@@ -24,6 +25,17 @@ namespace FluentBuilder.Generator.Generator
             string actualBuilderName)
         {
             string accessibility = config.BuilderAccessibility;
+
+            // File-local types must be top-level in C#. If the builder is being generated as a nested
+            // type (there are containing types), do not emit the 'file' accessibility because that
+            // produces a file-local nested type which is invalid (CS9054). Fall back to 'private'
+            // for nested builders to keep generated code compilable; analyzer handles reporting
+            // unsupported file-scoped usage where appropriate.
+            if (string.Equals(accessibility, "file", StringComparison.OrdinalIgnoreCase)
+                && config.ContainingTypes != null && config.ContainingTypes.Count > 0)
+            {
+                accessibility = "private";
+            }
             string modifier = config.IsPartial ? "partial" : "sealed";
 
             // If the target type is generic, the builder should also be generic

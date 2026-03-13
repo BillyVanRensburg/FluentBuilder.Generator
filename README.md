@@ -595,7 +595,7 @@ If the generated builder’s name clashes with an already defined type, the comp
 Use the `[FluentName]` attribute on your class to specify a different, unique name for the builder. For example, `[FluentName("CustomBuilder")]`. If a custom namespace is set via `BuilderNamespace`, ensure that the name is unique in that namespace.
 
 ### FBBLD0007: Builder accessibility incompatible with constructor accessibility
-**Severity:** Error  
+**Severity:** Warning  
 **Category:** FluentBuilder  
 
 **Description:**  

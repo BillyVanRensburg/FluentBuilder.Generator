@@ -16,7 +16,7 @@ namespace FluentBuilder.Generator.Analyzers
             title: "Builder accessibility incompatible with constructor accessibility",
             messageFormat: "Builder accessibility '{0}' is more permissive than any accessible constructor of type '{1}'. The builder cannot instantiate the type.",
             category: "FluentBuilder",
-            defaultSeverity: DiagnosticSeverity.Error,
+            defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true,
             description: "The builder must have access to at least one constructor of the target type. If the builder is more accessible than all constructors, instantiation will fail.");
 
@@ -54,7 +54,15 @@ namespace FluentBuilder.Generator.Analyzers
 
             string builderAccessibilityName = GetBuilderAccessibilityFromAttribute(attribute) ?? "Public";
 
-            // Find the most accessible constructor (excluding static constructors)
+            // File-scoped builder is not supported by the generator; always report an error for it.
+            if (string.Equals(builderAccessibilityName, "File", StringComparison.OrdinalIgnoreCase))
+            {
+                var location = attribute.ApplicationSyntaxReference?.GetSyntax()?.GetLocation() ?? namedType.Locations.FirstOrDefault();
+                context.ReportDiagnostic(Diagnostic.Create(Rule, location, builderAccessibilityName, namedType.Name));
+                return;
+            }
+
+            // Find the constructors (excluding static constructors)
             var constructors = namedType.Constructors.Where(c => !c.IsStatic).ToList();
             if (constructors.Count == 0)
             {
@@ -68,18 +76,29 @@ namespace FluentBuilder.Generator.Analyzers
                 return;
             }
 
-            int builderLevel = GetAccessibilityLevel(builderAccessibilityName);
-            bool hasCompatibleCtor = constructors.Any(ctor =>
-            {
-                int ctorLevel = GetAccessibilityLevel(ctor.DeclaredAccessibility);
-                return ctorLevel >= builderLevel;
-            });
+            // Determine expected compatibility by comparing numeric accessibility levels.
+            // If no constructor has a level >= the requested builder accessibility level, report the diagnostic.
+            var builderLevel = GetAccessibilityLevel(builderAccessibilityName);
+            bool hasCompatibleCtor = constructors.Any(ctor => GetAccessibilityLevel(ctor.DeclaredAccessibility) >= builderLevel);
 
             if (!hasCompatibleCtor)
             {
                 var location = attribute.ApplicationSyntaxReference?.GetSyntax()?.GetLocation() ?? namedType.Locations.FirstOrDefault();
                 context.ReportDiagnostic(Diagnostic.Create(Rule, location, builderAccessibilityName, namedType.Name));
             }
+        }
+
+        private static bool IsConstructorAccessibleToBuilder(IMethodSymbol ctor)
+        {
+            // The generated builder is produced into the same assembly as the target type.
+            // Therefore constructors that are accessible to code in the same assembly are usable by the builder.
+            // That includes: public, internal, and protected internal (ProtectedOrInternal).
+            // Protected, private, and private protected (ProtectedAndInternal) are not accessible by the builder
+            // because the builder is not a derived type of the target.
+
+            return ctor.DeclaredAccessibility == Accessibility.Public
+                || ctor.DeclaredAccessibility == Accessibility.Internal
+                || ctor.DeclaredAccessibility == Accessibility.ProtectedOrInternal;
         }
 
         private static string? GetBuilderAccessibilityFromAttribute(AttributeData attribute)
