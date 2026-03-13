@@ -9,7 +9,7 @@ using System.Linq;
 namespace FluentBuilder.Generator.Analyzers
 {
     [TestClass]
-    public class FBBLD0007_AllCombinations
+    public class FBBLD0007
     {
         private static readonly ImmutableArray<DiagnosticAnalyzer> Analyzers =
             ImmutableArray.Create<DiagnosticAnalyzer>(new ConstructorAccessibilityAnalyzer());
