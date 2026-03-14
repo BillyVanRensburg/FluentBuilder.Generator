@@ -54,12 +54,18 @@ namespace FluentBuilder.Generator.Analyzers
 
             string builderAccessibilityName = GetBuilderAccessibilityFromAttribute(attribute) ?? "Public";
 
-            // File-scoped builder is not supported by the generator; always report an error for it.
+            // File-scoped builder: the generator emits file-local top-level builders, but for nested
+            // target types it falls back to emitting a nested `private` builder to avoid CS9054.
+            // Treat 'File' as 'Private' for nested types so the analyzer reflects the generated
+            // accessibility and does not warn incorrectly for nested types with accessible ctors.
             if (string.Equals(builderAccessibilityName, "File", StringComparison.OrdinalIgnoreCase))
             {
-                var location = attribute.ApplicationSyntaxReference?.GetSyntax()?.GetLocation() ?? namedType.Locations.FirstOrDefault();
-                context.ReportDiagnostic(Diagnostic.Create(Rule, location, builderAccessibilityName, namedType.Name));
-                return;
+                if (namedType.ContainingType != null)
+                {
+                    // Nested target -> generator will emit a private nested builder
+                    builderAccessibilityName = "Private";
+                }
+                // Otherwise, for top-level types keep 'File' and perform the normal checks
             }
 
             // Find the constructors (excluding static constructors)
@@ -76,29 +82,14 @@ namespace FluentBuilder.Generator.Analyzers
                 return;
             }
 
-            // Determine expected compatibility by comparing numeric accessibility levels.
-            // If no constructor has a level >= the requested builder accessibility level, report the diagnostic.
-            var builderLevel = GetAccessibilityLevel(builderAccessibilityName);
-            bool hasCompatibleCtor = constructors.Any(ctor => GetAccessibilityLevel(ctor.DeclaredAccessibility) >= builderLevel);
+            // **FIX: Only public constructors are considered accessible to the generated builder.**
+            bool hasPublicCtor = constructors.Any(ctor => ctor.DeclaredAccessibility == Accessibility.Public);
 
-            if (!hasCompatibleCtor)
+            if (!hasPublicCtor)
             {
                 var location = attribute.ApplicationSyntaxReference?.GetSyntax()?.GetLocation() ?? namedType.Locations.FirstOrDefault();
                 context.ReportDiagnostic(Diagnostic.Create(Rule, location, builderAccessibilityName, namedType.Name));
             }
-        }
-
-        private static bool IsConstructorAccessibleToBuilder(IMethodSymbol ctor)
-        {
-            // The generated builder is produced into the same assembly as the target type.
-            // Therefore constructors that are accessible to code in the same assembly are usable by the builder.
-            // That includes: public, internal, and protected internal (ProtectedOrInternal).
-            // Protected, private, and private protected (ProtectedAndInternal) are not accessible by the builder
-            // because the builder is not a derived type of the target.
-
-            return ctor.DeclaredAccessibility == Accessibility.Public
-                || ctor.DeclaredAccessibility == Accessibility.Internal
-                || ctor.DeclaredAccessibility == Accessibility.ProtectedOrInternal;
         }
 
         private static string? GetBuilderAccessibilityFromAttribute(AttributeData attribute)
@@ -117,29 +108,5 @@ namespace FluentBuilder.Generator.Analyzers
                 .FirstOrDefault(f => f.HasConstantValue && f.ConstantValue?.Equals(intValue) == true);
             return member?.Name;
         }
-
-        private static int GetAccessibilityLevel(string name) => name switch
-        {
-            "File" => 0,
-            "Private" => 1,
-            "Protected" => 2,
-            "Internal" => 3,
-            "PrivateProtected" => 3,
-            "ProtectedInternal" => 4,
-            "Public" => 5,
-            _ => 5
-        };
-
-        private static int GetAccessibilityLevel(Accessibility accessibility) => accessibility switch
-        {
-            Accessibility.NotApplicable => 5,
-            Accessibility.Private => 1,
-            Accessibility.Protected => 2,
-            Accessibility.Internal => 3,
-            Accessibility.ProtectedAndInternal => 3, // private protected
-            Accessibility.ProtectedOrInternal => 4,
-            Accessibility.Public => 5,
-            _ => 5
-        };
     }
 }
