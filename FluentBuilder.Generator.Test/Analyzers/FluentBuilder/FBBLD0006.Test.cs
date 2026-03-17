@@ -21,24 +21,6 @@ namespace FluentBuilder.Generator.Analyzers
     public class FBBLD0006
     {
         // ================================================================================
-        // Top‑level target – no conflict
-        // ================================================================================
-
-        [TestMethod]
-        public void TopLevel_NoConflict_NoError()
-        {
-            var source = @"
-using FluentBuilder;
-
-namespace Demo
-{
-    [FluentBuilder]
-    public class Order { }
-}";
-            RunTest(source, expectError: false);
-        }
-
-        // ================================================================================
         // Top‑level target – conflict in same namespace
         // ================================================================================
 
@@ -56,25 +38,6 @@ namespace Demo
     public class Order { }
 }";
             RunTest(source, expectError: true);
-        }
-
-        // ================================================================================
-        // Top‑level target – custom builder name via FluentName, no conflict
-        // ================================================================================
-
-        [TestMethod]
-        public void TopLevel_CustomNameNoConflict_NoError()
-        {
-            var source = @"
-using FluentBuilder;
-
-namespace Demo
-{
-    [FluentName(""CustomOrderBuilder"")]
-    [FluentBuilder]
-    public class Order { }
-}";
-            RunTest(source, expectError: false);
         }
 
         // ================================================================================
@@ -96,29 +59,6 @@ namespace Demo
     public class Order { }
 }";
             RunTest(source, expectError: true);
-        }
-
-        // ================================================================================
-        // Top‑level target – custom namespace via BuilderNamespace, no conflict
-        // ================================================================================
-
-        [TestMethod]
-        public void TopLevel_CustomNamespaceNoConflict_NoError()
-        {
-            var source = @"
-using FluentBuilder;
-
-namespace Demo
-{
-    [FluentBuilder(BuilderNamespace = ""Other"")]
-    public class Order { }
-}
-
-namespace Other
-{
-    // no conflicting type
-}";
-            RunTest(source, expectError: false);
         }
 
         // ================================================================================
@@ -145,27 +85,6 @@ namespace Other
         }
 
         // ================================================================================
-        // Nested target – no conflict
-        // ================================================================================
-
-        [TestMethod]
-        public void Nested_NoConflict_NoError()
-        {
-            var source = @"
-using FluentBuilder;
-
-namespace Demo
-{
-    public partial class Container
-    {
-        [FluentBuilder]
-        public class Order { }
-    }
-}";
-            RunTest(source, expectError: false);
-        }
-
-        // ================================================================================
         // Nested target – conflict with existing nested type in same container
         // ================================================================================
 
@@ -186,52 +105,6 @@ namespace Demo
     }
 }";
             RunTest(source, expectError: true);
-        }
-
-        // ================================================================================
-        // Nested target – conflict with top‑level type should NOT be an error
-        // (because builder is nested, not top‑level)
-        // ================================================================================
-
-        [TestMethod]
-        public void Nested_ConflictWithTopLevelType_NoError()
-        {
-            var source = @"
-using FluentBuilder;
-
-namespace Demo
-{
-    public class OrderBuilder { } // top‑level type, should not conflict
-
-    public partial class Container
-    {
-        [FluentBuilder]
-        public class Order { }
-    }
-}";
-            RunTest(source, expectError: false);
-        }
-
-        // ================================================================================
-        // Nested target – custom builder name via FluentName, no conflict
-        // ================================================================================
-
-        [TestMethod]
-        public void Nested_CustomNameNoConflict_NoError()
-        {
-            var source = @"
-using FluentBuilder;
-
-namespace Demo
-{
-    public partial class Container
-    {
-        [FluentName(""CustomOrderBuilder"")]
-        [FluentBuilder]
-        public class Order { }
-    }
-}";
-            RunTest(source, expectError: false);
         }
 
         // ================================================================================

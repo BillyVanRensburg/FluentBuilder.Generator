@@ -6,7 +6,6 @@ namespace Demo
 
     public partial class Container
     {
-
         [FluentBuilder]
         public class Order { }
     }
