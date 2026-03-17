@@ -19,7 +19,7 @@ namespace FluentBuilder.Generator.Analyzers
                 "The generated builder name '{0}' conflicts with an existing type '{1}' in {2}.",
                 "FluentBuilder",
                 DiagnosticSeverity.Error,
-                true);
+                isEnabledByDefault: true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
             => ImmutableArray.Create(Rule);
@@ -29,145 +29,87 @@ namespace FluentBuilder.Generator.Analyzers
             context.EnableConcurrentExecution();
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
 
-            context.RegisterCompilationStartAction(startContext =>
-            {
-                var compilation = startContext.Compilation;
-
-                var fluentBuilderAttr =
-                    compilation.GetTypeByMetadataName("FluentBuilder.FluentBuilderAttribute");
-
-                var fluentNameAttr =
-                    compilation.GetTypeByMetadataName("FluentBuilder.FluentNameAttribute");
-
-                if (fluentBuilderAttr == null)
-                    return;
-
-                startContext.RegisterCompilationEndAction(ctx =>
-                    AnalyzeCompilation(ctx, compilation, fluentBuilderAttr, fluentNameAttr));
-            });
+            context.RegisterSymbolAction(AnalyzeType, SymbolKind.NamedType);
         }
 
-
-        private static void AnalyzeCompilation(
-            CompilationAnalysisContext context,
-            Compilation compilation,
-            INamedTypeSymbol fluentBuilderAttr,
-            INamedTypeSymbol? fluentNameAttr)
+        private static void AnalyzeType(SymbolAnalysisContext context)
         {
-            var allTypes = GetAllTypes(compilation.Assembly.GlobalNamespace);
-            var fluentBuilderTypes = allTypes
-                .Where(t => t.GetAttributes()
-                    .Any(a => SymbolEqualityComparer.Default.Equals(a.AttributeClass, fluentBuilderAttr)))
-                .ToList();
+            var type = (INamedTypeSymbol)context.Symbol;
 
-            foreach (var sourceType in fluentBuilderTypes)
+            // Find [FluentBuilder] attribute by full name
+            var fluentBuilderAttr = type.GetAttributes()
+                .FirstOrDefault(a =>
+                    a.AttributeClass?.ToDisplayString() == "FluentBuilder.FluentBuilderAttribute");
+
+            if (fluentBuilderAttr == null)
+                return;
+
+            var builderName = GetBuilderName(type);
+            var builderNamespace = GetBuilderNamespace(type, fluentBuilderAttr);
+
+            // Nested type scenario
+            if (type.ContainingType != null)
             {
-            // Find the FluentBuilder attribute by name to be resilient across compilation contexts
-            var attr = sourceType.GetAttributes()
-                .FirstOrDefault(a => a.AttributeClass?.Name == "FluentBuilderAttribute");
+                var container = type.ContainingType;
 
-                if (attr == null)
-                    continue;
+                var conflicts = container.GetTypeMembers()
+                    .Where(t =>
+                        t.Name == builderName &&
+                        !SymbolEqualityComparer.Default.Equals(t, type));
 
-            var builderName = GetBuilderName(sourceType);
-                var builderNamespace = GetBuilderNamespace(sourceType, attr);
-
-                if (sourceType.ContainingType != null)
+                foreach (var conflict in conflicts)
                 {
-                    // Nested type - builder is placed in the container
-                    var container = sourceType.ContainingType;
+                    context.ReportDiagnostic(
+                        Diagnostic.Create(
+                            Rule,
+                            type.Locations.FirstOrDefault(),
+                            builderName,
+                            conflict.Name,
+                            $"container '{container.Name}'"));
+                }
+            }
+            else
+            {
+                // Top-level type
+                INamespaceSymbol? targetNamespace;
+                string locationDescription;
 
-                // Search members of the container for conflicting nested types
-                var conflictingTypes = container.GetTypeMembers()
-                    .Where(t => t.Name == builderName && !SymbolEqualityComparer.Default.Equals(t, sourceType))
-                    .ToList();
+                if (!string.IsNullOrEmpty(builderNamespace))
+                {
+                    targetNamespace = GetNamespaceByName(
+                        context.Compilation.GlobalNamespace,
+                        builderNamespace);
 
-                    var sourceTree = sourceType.Locations.FirstOrDefault()?.SourceTree;
-                    foreach (var conflict in conflictingTypes)
-                    {
-                        // Only consider conflicts declared in the same source tree as the target type
-                        if (sourceTree == null || !conflict.Locations.Any(l => l.SourceTree == sourceTree))
-                            continue;
+                    if (targetNamespace == null)
+                        return;
 
-                        var location = attr.ApplicationSyntaxReference?.GetSyntax().GetLocation() ?? sourceType.Locations.FirstOrDefault();
-                        context.ReportDiagnostic(Diagnostic.Create(Rule, location, builderName, conflict.Name, $"container '{container.Name}'"));
-                    }
+                    locationDescription = $"namespace '{builderNamespace}'";
                 }
                 else
                 {
-                    // Top-level type
-                    INamespaceSymbol? targetNamespace;
-                    string locationDescription;
-
-                    if (!string.IsNullOrEmpty(builderNamespace))
-                    {
-                        // Custom namespace specified
-                        targetNamespace = GetNamespaceByName(compilation.GlobalNamespace, builderNamespace);
-                        if (targetNamespace == null)
-                        {
-                            // Namespace doesn't exist, no conflict possible
-                            continue;
-                        }
-                        locationDescription = $"namespace '{builderNamespace}'";
-                    }
-                    else
-                    {
-                        // Default namespace (same as target type)
-                        targetNamespace = sourceType.ContainingNamespace;
-                        locationDescription = $"namespace '{targetNamespace.ToDisplayString()}'";
-                    }
-
-                    var conflictingTypes = targetNamespace.GetTypeMembers(builderName)
-                        .Where(t => !SymbolEqualityComparer.Default.Equals(t, sourceType))
-                        .ToList();
-
-                    var sourceTree = sourceType.Locations.FirstOrDefault()?.SourceTree;
-                    foreach (var conflict in conflictingTypes)
-                    {
-                        // Only consider conflicts declared in the same source tree as the target type
-                        if (sourceTree == null || !conflict.Locations.Any(l => l.SourceTree == sourceTree))
-                            continue;
-
-                        var location = attr.ApplicationSyntaxReference?.GetSyntax().GetLocation() ?? sourceType.Locations.FirstOrDefault();
-                        context.ReportDiagnostic(Diagnostic.Create(Rule, location, builderName, conflict.Name, locationDescription));
-                    }
+                    targetNamespace = type.ContainingNamespace;
+                    locationDescription = $"namespace '{targetNamespace.ToDisplayString()}'";
                 }
-            }
-        }
 
-        private static IEnumerable<INamedTypeSymbol> GetAllTypes(INamespaceSymbol ns)
-        {
-            foreach (var member in ns.GetMembers())
-            {
-                if (member is INamespaceSymbol nestedNs)
+                var conflicts = targetNamespace.GetTypeMembers(builderName)
+                    .Where(t =>
+                        !SymbolEqualityComparer.Default.Equals(t, type));
+
+                foreach (var conflict in conflicts)
                 {
-                    foreach (var t in GetAllTypes(nestedNs))
-                        yield return t;
+                    context.ReportDiagnostic(
+                        Diagnostic.Create(
+                            Rule,
+                            type.Locations.FirstOrDefault(),
+                            builderName,
+                            conflict.Name,
+                            locationDescription));
                 }
-                else if (member is INamedTypeSymbol type)
-                {
-                    yield return type;
-
-                    foreach (var nested in GetNestedTypes(type))
-                        yield return nested;
-                }
-            }
-        }
-
-        private static IEnumerable<INamedTypeSymbol> GetNestedTypes(INamedTypeSymbol type)
-        {
-            foreach (var nested in type.GetTypeMembers())
-            {
-                yield return nested;
-
-                foreach (var deeper in GetNestedTypes(nested))
-                    yield return deeper;
             }
         }
 
         private static string GetBuilderName(INamedTypeSymbol type)
         {
-            // Try to find a FluentName attribute on the type and return its constructor argument
             var attr = type.GetAttributes()
                 .FirstOrDefault(a => a.AttributeClass?.Name == "FluentNameAttribute");
 
@@ -181,21 +123,22 @@ namespace FluentBuilder.Generator.Analyzers
             return type.Name + "Builder";
         }
 
-        private static string? GetBuilderNamespace(INamedTypeSymbol type, AttributeData fluentBuilderAttr)
+        private static string? GetBuilderNamespace(
+            INamedTypeSymbol type,
+            AttributeData fluentBuilderAttr)
         {
-            // Look for BuilderNamespace named argument
             foreach (var arg in fluentBuilderAttr.NamedArguments)
             {
                 if (arg.Key == "BuilderNamespace")
-                {
                     return arg.Value.Value as string;
-                }
             }
 
             return null;
         }
 
-        private static INamespaceSymbol? GetNamespaceByName(INamespaceSymbol root, string namespaceName)
+        private static INamespaceSymbol? GetNamespaceByName(
+            INamespaceSymbol root,
+            string namespaceName)
         {
             if (string.IsNullOrEmpty(namespaceName))
                 return root;
@@ -205,19 +148,14 @@ namespace FluentBuilder.Generator.Analyzers
 
             foreach (var part in parts)
             {
-                var found = false;
-                foreach (var member in current.GetMembers())
-                {
-                    if (member is INamespaceSymbol ns && ns.Name == part)
-                    {
-                        current = ns;
-                        found = true;
-                        break;
-                    }
-                }
+                var next = current.GetMembers()
+                    .OfType<INamespaceSymbol>()
+                    .FirstOrDefault(n => n.Name == part);
 
-                if (!found)
+                if (next == null)
                     return null;
+
+                current = next;
             }
 
             return current;
