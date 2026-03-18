@@ -18,7 +18,7 @@ using System.Linq;
 namespace FluentBuilder.Generator.Analyzers.Tests
 {
     [TestClass]
-    public class FBBLD0006
+    public class FBBLD006
     {
         // ================================================================================
         // Top‑level target – conflict in same namespace
@@ -146,15 +146,15 @@ namespace Demo
                 langVersion: "latest");
 
             var actualError = result.CompilationErrors
-                .FirstOrDefault(d => d.Id == "FBBLD0006");
+                .FirstOrDefault(d => d.Id == BuilderNameConflictAnalyzer.DiagnosticId);
 
             if (expectError)
             {
-                Assert.IsNotNull(actualError, $"Expected FBBLD0006 error but none reported for:\n{source}");
+                Assert.IsNotNull(actualError, $"Expected FBBLD006 error but none reported for:\n{source}");
             }
             else
             {
-                Assert.IsNull(actualError, $"FBBLD0006 error was reported unexpectedly for:\n{source}");
+                Assert.IsNull(actualError, $"FBBLD006 error was reported unexpectedly for:\n{source}");
             }
         }
     }

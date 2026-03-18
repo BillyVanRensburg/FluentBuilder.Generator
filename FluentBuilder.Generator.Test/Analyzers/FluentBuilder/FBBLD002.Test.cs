@@ -18,7 +18,7 @@ using System.Linq;
 namespace FluentBuilder.Generator.Analyzers.Tests
 {
     [TestClass]
-    public class FBBLD0002
+    public class FBBLD002
     {
         [TestMethod]
         public void BuilderAccessibilityFile_LangVerBelow11_Disallowed()
@@ -39,9 +39,9 @@ namespace FluentBuilder.Generator.Analyzers.Tests
             var result = BaseCode.Action.RunGeneratorAndCompile(inputSource, analyzers, "10.0");
 
             var analyzerError = result.CompilationErrors
-                .FirstOrDefault(d => d.Id == "FBBLD0002");
+                .FirstOrDefault(d => d.Id == FluentBuilderFileAccessibilityAnalyzer.DiagnosticId);
 
-            Assert.IsNotNull(analyzerError, "Expected FBBLD0002 error was not reported.");
+            Assert.IsNotNull(analyzerError, "Expected FBBLD002 error was not reported.");
         }
 
         [TestMethod]

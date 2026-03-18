@@ -21,17 +21,6 @@ namespace FluentBuilder.Generator.Diagnostics
         // ==================== ERROR CODES (FB001-FB020) ====================
 
         /// <summary>
-        /// FB004: Nested builder type not found.
-        /// </summary>
-        public static readonly DiagnosticDescriptor NestedBuilderWarning = new DiagnosticDescriptor(
-            id: "FB004",
-            title: "Nested builder type not found",
-            messageFormat: "Type '{0}' referenced in {1} does not have a builder class. Ensure it has [FluentBuilder] attribute.",
-            category: "FluentBuilder",
-            DiagnosticSeverity.Warning,
-            isEnabledByDefault: true);
-
-        /// <summary>
         /// FB005: Missing required assembly reference.
         /// </summary>
         public static readonly DiagnosticDescriptor MissingAttributeError = new DiagnosticDescriptor(

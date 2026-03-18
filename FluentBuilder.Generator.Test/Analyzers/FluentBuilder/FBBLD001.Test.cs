@@ -18,7 +18,7 @@ using System.Linq;
 namespace FluentBuilder.Generator.Analyzers.Tests
 {
     [TestClass]
-    public class FBBLD0001
+    public class FBBLD001
     {
         private static readonly ImmutableArray<DiagnosticAnalyzer> Analyzers =
             ImmutableArray.Create<DiagnosticAnalyzer>(new FluentBuilderAnalyzer());
@@ -37,8 +37,8 @@ namespace FluentBuilder.Generator.Analyzers.Tests
                 """;
 
             var result = BaseCode.Action.RunGeneratorAndCompile(inputSource, Analyzers, "13.0");
-            var hasError = result.CompilationErrors.Any(d => d.Id == "FBBLD0001");
-            Assert.IsFalse(hasError, "Expected no FBBLD0001 error, but one was reported.");
+            var hasError = result.CompilationErrors.Any(d => d.Id == FluentBuilderAnalyzer.DiagnosticId);
+            Assert.IsFalse(hasError, "Expected no FBBLD001 error, but one was reported.");
         }
 
         [TestMethod]
@@ -55,8 +55,8 @@ namespace FluentBuilder.Generator.Analyzers.Tests
                 """;
 
             var result = BaseCode.Action.RunGeneratorAndCompile(inputSource, Analyzers, "13.0");
-            var hasError = result.CompilationErrors.Any(d => d.Id == "FBBLD0001");
-            Assert.IsFalse(hasError, "Expected no FBBLD0001 error for Public accessibility.");
+            var hasError = result.CompilationErrors.Any(d => d.Id == FluentBuilderAnalyzer.DiagnosticId);
+            Assert.IsFalse(hasError, "Expected no FBBLD001 error for Public accessibility.");
         }
 
         [TestMethod]
@@ -73,8 +73,8 @@ namespace FluentBuilder.Generator.Analyzers.Tests
                 """;
 
             var result = BaseCode.Action.RunGeneratorAndCompile(inputSource, Analyzers, "13.0");
-            var hasError = result.CompilationErrors.Any(d => d.Id == "FBBLD0001");
-            Assert.IsFalse(hasError, "Expected no FBBLD0001 error for Internal accessibility.");
+            var hasError = result.CompilationErrors.Any(d => d.Id == FluentBuilderAnalyzer.DiagnosticId);
+            Assert.IsFalse(hasError, "Expected no FBBLD001 error for Internal accessibility.");
         }
 
         [TestMethod]
@@ -91,8 +91,8 @@ namespace FluentBuilder.Generator.Analyzers.Tests
                 """;
 
             var result = BaseCode.Action.RunGeneratorAndCompile(inputSource, Analyzers, "13.0");
-            var error = result.CompilationErrors.FirstOrDefault(d => d.Id == "FBBLD0001");
-            Assert.IsNotNull(error, "Expected FBBLD0001 error for Private accessibility, but none was reported.");
+            var error = result.CompilationErrors.FirstOrDefault(d => d.Id == FluentBuilderAnalyzer.DiagnosticId);
+            Assert.IsNotNull(error, "Expected FBBLD001 error for Private accessibility, but none was reported.");
         }
 
         [TestMethod]
@@ -109,8 +109,8 @@ namespace FluentBuilder.Generator.Analyzers.Tests
                 """;
 
             var result = BaseCode.Action.RunGeneratorAndCompile(inputSource, Analyzers, "13.0");
-            var error = result.CompilationErrors.FirstOrDefault(d => d.Id == "FBBLD0001");
-            Assert.IsNotNull(error, "Expected FBBLD0001 error for Protected accessibility, but none was reported.");
+            var error = result.CompilationErrors.FirstOrDefault(d => d.Id == FluentBuilderAnalyzer.DiagnosticId);
+            Assert.IsNotNull(error, "Expected FBBLD001 error for Protected accessibility, but none was reported.");
         }
 
         [TestMethod]
@@ -127,8 +127,8 @@ namespace FluentBuilder.Generator.Analyzers.Tests
                 """;
 
             var result = BaseCode.Action.RunGeneratorAndCompile(inputSource, Analyzers, "13.0");
-            var error = result.CompilationErrors.FirstOrDefault(d => d.Id == "FBBLD0001");
-            Assert.IsNotNull(error, "Expected FBBLD0001 error for File accessibility, but none was reported.");
+            var error = result.CompilationErrors.FirstOrDefault(d => d.Id == FluentBuilderAnalyzer.DiagnosticId);
+            Assert.IsNotNull(error, "Expected FBBLD001 error for File accessibility, but none was reported.");
         }
 
      public void TopLevelRecord_PrivateAccessibility_ReportsDiagnostic()
@@ -144,8 +144,8 @@ namespace FluentBuilder.Generator.Analyzers.Tests
                 """;
 
             var result = BaseCode.Action.RunGeneratorAndCompile(inputSource, Analyzers, "13.0");
-            var error = result.CompilationErrors.FirstOrDefault(d => d.Id == "FBBLD0001");
-            Assert.IsNotNull(error, "Expected FBBLD0001 error for record with Private accessibility.");
+            var error = result.CompilationErrors.FirstOrDefault(d => d.Id == FluentBuilderAnalyzer.DiagnosticId);
+            Assert.IsNotNull(error, "Expected FBBLD001 error for record with Private accessibility.");
         }
 
         [TestMethod]
@@ -159,8 +159,8 @@ namespace FluentBuilder.Generator.Analyzers.Tests
                 """;
 
             var result = BaseCode.Action.RunGeneratorAndCompile(inputSource, Analyzers, "13.0");
-            var hasError = result.CompilationErrors.Any(d => d.Id == "FBBLD0001");
-            Assert.IsFalse(hasError, "Expected no FBBLD0001 error when no attribute is present.");
+            var hasError = result.CompilationErrors.Any(d => d.Id == FluentBuilderAnalyzer.DiagnosticId);
+            Assert.IsFalse(hasError, "Expected no FBBLD001 error when no attribute is present.");
         }
     }
 }

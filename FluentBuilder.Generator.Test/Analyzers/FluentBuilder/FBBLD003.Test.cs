@@ -18,7 +18,7 @@ using System.Linq;
 namespace FluentBuilder.Generator.Analyzers.Tests
 {
     [TestClass]
-    public class FBBLD0003
+    public class FBBLD003
     {
         [TestMethod]
         public void BuilderAccessibilityPrivateProtected_LangVerBelow7_2_Disallowed()
@@ -42,9 +42,9 @@ namespace FluentBuilder.Generator.Analyzers.Tests
             var result = BaseCode.Action.RunGeneratorAndCompile(inputSource, analyzers, "7.0");
 
             var analyzerError = result.CompilationErrors
-                .FirstOrDefault(d => d.Id == "FBBLD0003");
+                .FirstOrDefault(d => d.Id == FluentBuilderPrivateProtectedAccessibilityAnalyzer.DiagnosticId);
 
-            Assert.IsNotNull(analyzerError, "Expected FBBLD0003 error was not reported.");
+            Assert.IsNotNull(analyzerError, "Expected FBBLD003 error was not reported.");
         }
 
         [TestMethod]

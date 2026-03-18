@@ -461,16 +461,6 @@ namespace FluentBuilder.Generator.Generator
             if (sb == null || type == null || string.IsNullOrEmpty(target) || string.IsNullOrEmpty(name))
                 return;
 
-            if (!TypeHelper.HasBuilder(type, compilation))
-            {
-                context.ReportDiagnostic(Diagnostic.Create(
-                    Descriptor.NestedBuilderWarning,
-                    null,
-                    type?.Name ?? "unknown",
-                    name));
-                return;
-            }
-
             string builderTypeName = type is INamedTypeSymbol nts
                 ? GetFluentBuilderName(nts)
                 : type.Name + Constant.DefaultNames.BuilderSuffix;

@@ -10,7 +10,7 @@ namespace FluentBuilder.Generator.Analyzers
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class BuilderNameConflictAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "FBBLD0006";
+        public const string DiagnosticId = "FBBLD06";
 
         private static readonly DiagnosticDescriptor Rule =
             new DiagnosticDescriptor(

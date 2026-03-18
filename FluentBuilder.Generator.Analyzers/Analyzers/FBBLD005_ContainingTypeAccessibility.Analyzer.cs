@@ -12,7 +12,7 @@ namespace FluentBuilder.Generator.Analyzers
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class BuilderAccessibilityVsContainerAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "FBBLD0005";
+        public const string DiagnosticId = "FBBLD005";
 
         private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
             id: DiagnosticId,

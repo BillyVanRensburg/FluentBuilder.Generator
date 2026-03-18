@@ -1,5 +1,5 @@
+using FluentBuilder;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Immutable;
 using System.Linq;
@@ -7,21 +7,21 @@ using System.Linq;
 namespace FluentBuilder.Generator.Analyzers
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class FluentBuilderFileAccessibilityAnalyzer : DiagnosticAnalyzer
+    public sealed class FluentBuilderAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "FBBLD0002";
+        public const string DiagnosticId = "FBBLD001";
 
         private static readonly DiagnosticDescriptor Rule =
             new DiagnosticDescriptor(
                 id: DiagnosticId,
-                title: "BuilderAccessibility.File requires C# 11 or higher",
+                title: "Invalid BuilderAccessibility for top-level type",
                 messageFormat:
-                    "BuilderAccessibility.File is not supported in C# language version '{0}'. C# 11 or higher is required.",
+                    "Top-level {0} '{1}' can only use BuilderAccessibility.Public or BuilderAccessibility.Internal",
                 category: "Usage",
                 defaultSeverity: DiagnosticSeverity.Error,
                 isEnabledByDefault: true,
                 description:
-                    "The 'file' accessibility modifier is only available starting from C# 11.");
+                    "Top-level types using FluentBuilder must specify Public or Internal accessibility if explicitly set.");
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
             => ImmutableArray.Create(Rule);
@@ -49,52 +49,56 @@ namespace FluentBuilder.Generator.Analyzers
         {
             var namedType = (INamedTypeSymbol)context.Symbol;
 
+            // Only analyze top-level classes and records
             if (namedType.TypeKind != TypeKind.Class && !namedType.IsRecord)
                 return;
 
             if (namedType.IsImplicitlyDeclared)
                 return;
 
+            if (namedType.ContainingType != null) // only top-level
+                return;
+
             var attribute = namedType.GetAttributes()
-                .FirstOrDefault(a =>
-                    SymbolEqualityComparer.Default.Equals(a.AttributeClass, attributeSymbol));
+                .FirstOrDefault(a => SymbolEqualityComparer.Default.Equals(a.AttributeClass, attributeSymbol));
 
             if (attribute == null)
                 return;
 
+            // Check BuilderAccessibility argument
             var builderArg = attribute.NamedArguments
                 .FirstOrDefault(kvp => kvp.Key == "BuilderAccessibility");
 
-            if (builderArg.Key == null || builderArg.Value.Value == null)
-                return;
+            bool reportDiagnostic = false;
 
-            var rawValue = builderArg.Value.Value;
-
-            if (builderArg.Value.Type is not INamedTypeSymbol enumType ||
-                enumType.TypeKind != TypeKind.Enum)
-                return;
-
-            var memberName = enumType.GetMembers()
-                .OfType<IFieldSymbol>()
-                .FirstOrDefault(f => f.HasConstantValue && Equals(f.ConstantValue, rawValue))
-                ?.Name;
-
-            if (memberName != "File")
-                return;
-
-            // ✅ Check C# language version
-            if (context.Compilation is CSharpCompilation csharpCompilation)
+            if (builderArg.Key != null && builderArg.Value.Value != null)
             {
-                var languageVersion = csharpCompilation.LanguageVersion;
+                // Argument is explicitly provided, check its value
+                var rawValue = builderArg.Value.Value;
 
-                if (languageVersion < LanguageVersion.CSharp11)
+                if (builderArg.Value.Type is INamedTypeSymbol enumType && enumType.TypeKind == TypeKind.Enum)
                 {
-                    context.ReportDiagnostic(
-                        Diagnostic.Create(
-                            Rule,
-                            namedType.Locations[0],
-                            languageVersion.ToDisplayString()));
+                    var memberName = enumType.GetMembers()
+                        .OfType<IFieldSymbol>()
+                        .FirstOrDefault(f => f.HasConstantValue && f.ConstantValue.Equals(rawValue))
+                        ?.Name;
+
+                    // Only Public and Internal are allowed
+                    if (memberName != "Public" && memberName != "Internal")
+                    {
+                        reportDiagnostic = true;
+                    }
                 }
+            }
+
+            if (reportDiagnostic)
+            {
+                var typeKind = namedType.IsRecord ? "record" : "class";
+                context.ReportDiagnostic(Diagnostic.Create(
+                    Rule,
+                    namedType.Locations[0],
+                    typeKind,
+                    namedType.Name));
             }
         }
     }

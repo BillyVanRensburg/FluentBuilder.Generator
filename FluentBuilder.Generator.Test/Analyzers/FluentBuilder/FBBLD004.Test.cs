@@ -19,7 +19,7 @@ using System.Linq;
 namespace FluentBuilder.Generator.Analyzers.Tests
 {
     [TestClass]
-    public class FBBLD0004
+    public class FBBLD004
     {
         // ================================================================================
         // Target: public (top-level)
@@ -167,11 +167,11 @@ namespace Demo
                 langVersion: useLatestLang ? "latest" : null);
 
             var actualError = result.CompilationErrors
-                .FirstOrDefault(d => d.Id == "FBBLD0004");
+                .FirstOrDefault(d => d.Id == BuilderAccessibilityVsTargetTypeAnalyzer.DiagnosticId);
 
             if (expectError)
             {
-                Assert.IsNotNull(actualError, $"Expected FBBLD0004 error but none reported for:\n{source}");
+                Assert.IsNotNull(actualError, $"Expected FBBLD004 error but none reported for:\n{source}");
             }
             else
             {

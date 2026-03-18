@@ -7,21 +7,21 @@ using System.Linq;
 namespace FluentBuilder.Generator.Analyzers
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class FluentBuilderPrivateProtectedAccessibilityAnalyzer : DiagnosticAnalyzer
+    public sealed class FluentBuilderFileAccessibilityAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "FBBLD0003";
+        public const string DiagnosticId = "FBBLD002";
 
         private static readonly DiagnosticDescriptor Rule =
             new DiagnosticDescriptor(
                 id: DiagnosticId,
-                title: "BuilderAccessibility.PrivateProtected requires C# 7.2 or higher",
+                title: "BuilderAccessibility.File requires C# 11 or higher",
                 messageFormat:
-                    "BuilderAccessibility.PrivateProtected is not supported in C# language version '{0}'. C# 7.2 or higher is required.",
+                    "BuilderAccessibility.File is not supported in C# language version '{0}'. C# 11 or higher is required.",
                 category: "Usage",
                 defaultSeverity: DiagnosticSeverity.Error,
                 isEnabledByDefault: true,
                 description:
-                    "The 'private protected' accessibility modifier is only available starting from C# 7.2.");
+                    "The 'file' accessibility modifier is only available starting from C# 11.");
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
             => ImmutableArray.Create(Rule);
@@ -79,7 +79,7 @@ namespace FluentBuilder.Generator.Analyzers
                 .FirstOrDefault(f => f.HasConstantValue && Equals(f.ConstantValue, rawValue))
                 ?.Name;
 
-            if (memberName != "PrivateProtected")
+            if (memberName != "File")
                 return;
 
             // ✅ Check C# language version
@@ -87,7 +87,7 @@ namespace FluentBuilder.Generator.Analyzers
             {
                 var languageVersion = csharpCompilation.LanguageVersion;
 
-                if (languageVersion < LanguageVersion.CSharp7_2)
+                if (languageVersion < LanguageVersion.CSharp11)
                 {
                     context.ReportDiagnostic(
                         Diagnostic.Create(

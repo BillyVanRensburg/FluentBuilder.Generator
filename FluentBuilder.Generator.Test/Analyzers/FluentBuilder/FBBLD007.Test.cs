@@ -9,7 +9,7 @@ using System.Linq;
 namespace FluentBuilder.Generator.Analyzers.Tests
 {
     [TestClass]
-    public class FBBLD0007
+    public class FBBLD007
     {
         private static readonly ImmutableArray<DiagnosticAnalyzer> Analyzers =
             ImmutableArray.Create<DiagnosticAnalyzer>(new ConstructorAccessibilityAnalyzer());
@@ -163,7 +163,7 @@ public partial class Order {{ {ctor} Order() {{ }} }}
 }}";
             var result = BaseCode.Action.RunGeneratorAndCompile(source, ImmutableArray.Create<DiagnosticAnalyzer>(new ConstructorAccessibilityAnalyzer()), langVersion: lang);
             var matched = result.CompilationWarnings.ToList();
-            var actual = result.CompilationWarnings.Any(d => d.Id == "FBBLD0007");
+            var actual = result.CompilationWarnings.Any(d => d.Id == ConstructorAccessibilityAnalyzer.DiagnosticId);
             Assert.AreEqual(expected, actual, source);
             if (!expected)
             {
@@ -189,7 +189,7 @@ public partial class Order {{ {ctor} Order() {{ }} }}
 }}";
             var result = BaseCode.Action.RunGeneratorAndCompile(source, ImmutableArray.Create<DiagnosticAnalyzer>(new ConstructorAccessibilityAnalyzer()), langVersion: lang);
             var matched = result.CompilationWarnings.ToList();
-            var actual = result.CompilationWarnings.Any(d => d.Id == "FBBLD0007");
+            var actual = result.CompilationWarnings.Any(d => d.Id == ConstructorAccessibilityAnalyzer.DiagnosticId);
             Assert.AreEqual(expected, actual, source);
             if (!expected)
             {

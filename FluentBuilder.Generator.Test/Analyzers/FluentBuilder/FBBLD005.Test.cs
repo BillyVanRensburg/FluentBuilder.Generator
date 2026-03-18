@@ -18,7 +18,7 @@ using System.Linq;
 namespace FluentBuilder.Generator.Analyzers.Tests
 {
     [TestClass]
-    public class FBBLD0005
+    public class FBBLD005
     {
         // ================================================================================
         // Container: public
@@ -160,15 +160,15 @@ namespace Demo
                 langVersion: useLatestLang ? "latest" : null);
 
             var actualError = result.CompilationErrors
-                .FirstOrDefault(d => d.Id == "FBBLD0005");
+                .FirstOrDefault(d => d.Id == BuilderAccessibilityVsContainerAnalyzer.DiagnosticId);
 
             if (expectError)
             {
-                Assert.IsNotNull(actualError, $"Expected FBBLD0005 error but none reported for:\n{source}");
+                Assert.IsNotNull(actualError, $"Expected FBBLD005 error but none reported for:\n{source}");
             }
             else
             {
-                Assert.IsNull(actualError, $"FBBLD0005 error was reported unexpectedly for:\n{source}");
+                Assert.IsNull(actualError, $"FBBLD005 error was reported unexpectedly for:\n{source}");
                 // Also ensure no other compilation errors (e.g., from the compiler itself)
                 Assert.AreEqual(0, result.CompilationErrors.Count,
                     $"Unexpected compilation errors: {string.Join(", ", result.CompilationErrors.Select(e => e.GetMessage()))}");
