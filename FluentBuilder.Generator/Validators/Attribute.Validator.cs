@@ -124,13 +124,6 @@ namespace FluentBuilder.Generator.Validators
             var hasAccessibleConstructor = typeSymbol.Constructors
                 .Any(c => TypeHelper.ShouldIncludeConstructor(c));
 
-            if (!hasAccessibleConstructor)
-            {
-                var safeLocation = GetLocation(typeSymbol);
-                ReportError(Descriptor.NoPublicConstructorError, safeLocation, typeSymbol.Name);
-                return false;
-            }
-
             return true;
         }
 

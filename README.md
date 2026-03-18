@@ -639,6 +639,21 @@ The generated builder must be able to create instances of the target type. Stati
 - Remove the `[FluentBuilder]` attribute from the static class.  
 - If you need a builder for a type that provides factory methods, consider using an ordinary (non‑static) class.
 
+### FBBLD0010: No accessible constructor found
+**Severity:** Warning  
+**Category:** FluentBuilder  
+
+**Description:**  
+The type decorated with `[FluentBuilder]` has no constructor that is accessible to the generated builder (i.e., public, internal, or protected internal). Without an accessible constructor, the builder cannot instantiate the type.
+
+**Why this rule exists:**  
+The generated builder must be able to create instances of the target type. If all constructors are private, protected, or private protected, the builder code will fail to compile. This warning alerts you to the issue so you can provide an accessible constructor or switch to a factory method.
+
+**How to fix:**  
+- Add a public, internal, or protected internal constructor to the type.  
+- Use a public static factory method by applying `[FluentBuilderFactoryMethod("MethodName")]` – the generator will then use that factory instead of a constructor.  
+- If the type already has a public parameterless constructor (implicitly provided when no constructors are declared), no warning is shown.
+
 ## Conclusion
 The FluentBuilder source generator provides a comprehensive, attribute‑driven way to create expressive, type‑safe builders for your C# types. With support for validation, async, collections, and deep customisation, it fits a wide range of scenarios.
 

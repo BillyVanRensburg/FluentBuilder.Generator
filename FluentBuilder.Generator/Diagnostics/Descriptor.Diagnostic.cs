@@ -21,17 +21,6 @@ namespace FluentBuilder.Generator.Diagnostics
         // ==================== ERROR CODES (FB001-FB020) ====================
 
         /// <summary>
-        /// FB003: No accessible constructor found.
-        /// </summary>
-        public static readonly DiagnosticDescriptor NoPublicConstructorError = new DiagnosticDescriptor(
-            id: "FB003",
-            title: "No accessible constructor found",
-            messageFormat: "Class '{0}' has no public or internal constructors accessible to the builder. Add an accessible constructor or use [FluentIgnore] on existing constructors.",
-            category: "FluentBuilder",
-            DiagnosticSeverity.Warning,
-            isEnabledByDefault: true);
-
-        /// <summary>
         /// FB004: Nested builder type not found.
         /// </summary>
         public static readonly DiagnosticDescriptor NestedBuilderWarning = new DiagnosticDescriptor(
