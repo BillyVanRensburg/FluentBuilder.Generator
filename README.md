@@ -669,6 +669,23 @@ You may have intended to use a nested builder to configure the property’s obje
 - If the type is from an external library and you cannot add the attribute, consider wrapping it in your own builder type, or ignore the warning.  
 - If you do not need nested builder support, no action is required.
 
+### FBBLD012: Missing required assembly reference
+**Severity:** Error  
+**Category:** FluentBuilder  
+
+**Description:**  
+The code contains one or more `FluentBuilder` attributes (e.g., `[FluentBuilder]`, `[FluentName]`, etc.), but the attribute types cannot be resolved. This usually means the project is missing a reference to the assembly that defines these attributes.
+
+**Why this rule exists:**  
+Without the attribute definitions, the FluentBuilder source generator cannot function, and the attributes themselves are treated as errors by the compiler. This diagnostic gives a clear, actionable error message directing the user to add the required NuGet package or assembly reference.
+
+**How to fix:**  
+- Add the `FluentBuilder.Generator` NuGet package to your project:  
+  ```bash
+  dotnet add package FluentBuilder.Generator
+  ```
+- If you are using a direct assembly reference, ensure it is correctly referenced.
+
 ## Conclusion
 The FluentBuilder source generator provides a comprehensive, attribute‑driven way to create expressive, type‑safe builders for your C# types. With support for validation, async, collections, and deep customisation, it fits a wide range of scenarios.
 

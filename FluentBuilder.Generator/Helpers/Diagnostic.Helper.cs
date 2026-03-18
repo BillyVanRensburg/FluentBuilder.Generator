@@ -201,28 +201,6 @@ namespace FluentBuilder.Generator.Helpers
         }
 
         /// <summary>
-        /// Creates a diagnostic for a missing attribute.
-        /// </summary>
-        /// <param name="typeName">The name of the type missing the attribute.</param>
-        /// <param name="location">The location of the type (may be null).</param>
-        /// <returns>A diagnostic instance.</returns>
-        public static Diagnostic CreateMissingAttributeError(string typeName, Location? location = null)
-        {
-            return Create(Descriptor.MissingAttributeError, location, typeName);
-        }
-
-        /// <summary>
-        /// Reports a diagnostic for a missing attribute.
-        /// </summary>
-        /// <param name="context">The source production context.</param>
-        /// <param name="typeName">The name of the type missing the attribute.</param>
-        /// <param name="location">The location of the type (may be null).</param>
-        public static void ReportMissingAttributeError(SourceProductionContext context, string typeName, Location? location = null)
-        {
-            Report(context, Descriptor.MissingAttributeError, location, typeName);
-        }
-
-        /// <summary>
         /// Creates a diagnostic for an unsupported type.
         /// </summary>
         /// <param name="typeName">The name of the unsupported type.</param>

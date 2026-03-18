@@ -21,17 +21,6 @@ namespace FluentBuilder.Generator.Diagnostics
         // ==================== ERROR CODES (FB001-FB020) ====================
 
         /// <summary>
-        /// FB005: Missing required assembly reference.
-        /// </summary>
-        public static readonly DiagnosticDescriptor MissingAttributeError = new DiagnosticDescriptor(
-            id: "FB005",
-            title: "Missing required assembly reference",
-            messageFormat: "Cannot find FluentBuilder attributes. Please add a reference to the FluentBuilder assembly.",
-            category: "FluentBuilder",
-            DiagnosticSeverity.Error,
-            isEnabledByDefault: true);
-
-        /// <summary>
         /// FB007: Circular reference detected.
         /// </summary>
         public static readonly DiagnosticDescriptor CircularReferenceError = new DiagnosticDescriptor(
