@@ -15,7 +15,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace FluentBuilder.Generator.Analyzers
+namespace FluentBuilder.Generator.Analyzers.Tests
 {
     [TestClass]
     public class FBBLD0002
