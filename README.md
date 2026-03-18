@@ -625,6 +625,20 @@ The generated builder must be able to construct instances of the target type. Ab
 - If you need a builder for a derived concrete class, apply the attribute to that concrete class instead.  
 - Alternatively, consider using a factory pattern to create instances of concrete implementations and apply the attribute to those concrete types.
 
+### FBBLD0009: Cannot generate builder for static class
+**Severity:** Error  
+**Category:** FluentBuilder  
+
+**Description:**  
+The `[FluentBuilder]` attribute is applied to a static class. Static classes cannot be instantiated, so a builder cannot be generated.
+
+**Why this rule exists:**  
+The generated builder must be able to create instances of the target type. Static classes are sealed and contain only static members; they cannot be instantiated. Applying the attribute would lead to non‑compilable code.
+
+**How to fix:**  
+- Remove the `[FluentBuilder]` attribute from the static class.  
+- If you need a builder for a type that provides factory methods, consider using an ordinary (non‑static) class.
+
 ## Conclusion
 The FluentBuilder source generator provides a comprehensive, attribute‑driven way to create expressive, type‑safe builders for your C# types. With support for validation, async, collections, and deep customisation, it fits a wide range of scenarios.
 
