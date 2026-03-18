@@ -609,6 +609,22 @@ The generated builder must be able to create instances of the target type. If th
 - Or reduce the builder's accessibility via the `BuilderAccessibility` named argument on `[FluentBuilder]` so it is not more permissive than the available constructors.  
 - Alternatively, provide a public static factory method and point the generator at it using `[FluentBuilderFactoryMethod("MethodName")]`; the generator can use that factory instead of calling a constructor.  
 - Note: records with a primary constructor are assumed to have an accessible constructor and are exempt from this diagnostic.
+
+### FBBLD0008: Cannot generate builder for abstract class
+**Severity:** Error  
+**Category:** FluentBuilder  
+
+**Description:**  
+The `[FluentBuilder]` attribute is applied to an abstract class or record. The FluentBuilder source generator cannot create a concrete builder for an abstract type because there is no way to instantiate it.
+
+**Why this rule exists:**  
+The generated builder must be able to construct instances of the target type. Abstract classes cannot be instantiated directly, so any attempt to generate a builder for them would result in non‑compilable code. This analyzer catches the misconfiguration early and prevents the generation of an unusable builder.
+
+**How to fix:**  
+- Remove the `[FluentBuilder]` attribute from the abstract class.  
+- If you need a builder for a derived concrete class, apply the attribute to that concrete class instead.  
+- Alternatively, consider using a factory pattern to create instances of concrete implementations and apply the attribute to those concrete types.
+
 ## Conclusion
 The FluentBuilder source generator provides a comprehensive, attribute‑driven way to create expressive, type‑safe builders for your C# types. With support for validation, async, collections, and deep customisation, it fits a wide range of scenarios.
 

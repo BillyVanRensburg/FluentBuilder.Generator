@@ -21,17 +21,6 @@ namespace FluentBuilder.Generator.Diagnostics
         // ==================== ERROR CODES (FB001-FB020) ====================
 
         /// <summary>
-        /// FB001: Cannot generate builder for abstract class.
-        /// </summary>
-        public static readonly DiagnosticDescriptor AbstractClassError = new DiagnosticDescriptor(
-            id: "FB001",
-            title: "Cannot generate builder for abstract class",
-            messageFormat: "Cannot generate fluent builder for abstract class '{0}'",
-            category: "FluentBuilder",
-            DiagnosticSeverity.Error,
-            isEnabledByDefault: true);
-
-        /// <summary>
         /// FB002: Cannot generate builder for static class.
         /// </summary>
         public static readonly DiagnosticDescriptor StaticClassError = new DiagnosticDescriptor(

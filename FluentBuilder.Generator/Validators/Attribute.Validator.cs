@@ -97,12 +97,6 @@ namespace FluentBuilder.Generator.Validators
 
             var safeLocation = GetLocation(typeSymbol);
 
-            if (typeSymbol.IsAbstract && !typeSymbol.IsRecord)
-            {
-                ReportError(Descriptor.AbstractClassError, safeLocation, typeSymbol.Name);
-                return false;
-            }
-
             if (typeSymbol.IsStatic && !typeSymbol.IsRecord)
             {
                 ReportError(Descriptor.StaticClassError, safeLocation, typeSymbol.Name);
