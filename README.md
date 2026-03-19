@@ -518,7 +518,7 @@ The `Version` constant reflects the exact version of the generator assembly at t
 
 ### General
 
-### FBGEN001: Circular reference detected
+#### FBGEN001: Circular reference detected
 **Severity:** Error  
 **Category:** General  
 
@@ -703,6 +703,22 @@ Without the attribute definitions, the FluentBuilder source generator cannot fun
   dotnet add package FluentBuilder.Generator
   ```
 - If you are using a direct assembly reference, ensure it is correctly referenced.
+
+### FluentName
+
+#### FBNAM001: Invalid fluent method name
+**Severity:** Error  
+**Category:** FluentName  
+
+**Description:**  
+A member (property, field, or method) in a type decorated with `[FluentBuilder]` has a `[FluentName]` attribute specifying a custom fluent method name that is not a valid C# identifier. This would cause the generated builder code to be invalid.
+
+**Why this rule exists:**  
+The fluent method names generated for members must be valid C# identifiers (e.g., cannot contain spaces, start with a digit, or be a reserved keyword). If an invalid name is provided, the generated code will fail to compile. This analyzer catches the issue early.
+
+**How to fix:**  
+- Change the value in the `[FluentName]` attribute to a valid C# identifier (letters, digits, underscore, not starting with digit, not a keyword).  
+- If you intend to use a keyword, prefix it with `@` (e.g., `[FluentName("@class")]`). The analyzer accepts `@`-prefixed keywords as valid.
 
 ## Conclusion
 The FluentBuilder source generator provides a comprehensive, attribute‑driven way to create expressive, type‑safe builders for your C# types. With support for validation, async, collections, and deep customisation, it fits a wide range of scenarios.
