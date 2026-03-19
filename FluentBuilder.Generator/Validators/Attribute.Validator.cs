@@ -156,12 +156,6 @@ namespace FluentBuilder.Generator.Validators
                 return false;
             }
 
-            if (visitedBuilders.Contains(builderKey))
-            {
-                var safeLocation = GetLocation(typeSymbol);
-                ReportError(Descriptor.CircularReferenceError, safeLocation, typeSymbol.Name);
-                return false;
-            }
             return true;
         }
 

@@ -21,17 +21,6 @@ namespace FluentBuilder.Generator.Diagnostics
         // ==================== ERROR CODES (FB001-FB020) ====================
 
         /// <summary>
-        /// FB007: Circular reference detected.
-        /// </summary>
-        public static readonly DiagnosticDescriptor CircularReferenceError = new DiagnosticDescriptor(
-            id: "FB007",
-            title: "Circular reference detected",
-            messageFormat: "Circular reference detected in builder chain for '{0}'. Check nested builder references.",
-            category: "FluentBuilder",
-            DiagnosticSeverity.Error,
-            isEnabledByDefault: true);
-
-        /// <summary>
         /// FB008: Invalid fluent method name.
         /// </summary>
         public static readonly DiagnosticDescriptor InvalidFluentNameError = new DiagnosticDescriptor(
