@@ -219,14 +219,6 @@ namespace FluentBuilder.Generator.Generator
             {
                 string methodName = AttributeCache.GetConstructorArgument<string>(method, Constant.AttributeName.FluentName) ?? method.Name;
 
-                if (!IdentifierCache.IsValidIdentifier(methodName))
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(
-                        Descriptor.InvalidFluentNameError,
-                        method.Locations.FirstOrDefault(), methodName, method.Name));
-                    continue;
-                }
-
                 // Check for conflict with built-in build methods
                 if (methodName.Equals(config.BuildMethodName, StringComparison.Ordinal))
                 {

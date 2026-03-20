@@ -107,15 +107,6 @@ namespace FluentBuilder.Generator.Generator
             if (memberType == null)
                 return false;
 
-            if (!IdentifierCache.IsValidIdentifier(proposedName))
-            {
-                context.ReportDiagnostic(Diagnostic.Create(
-                    Descriptor.InvalidFluentNameError,
-                    member.Locations.FirstOrDefault(),
-                    proposedName, member.Name));
-                return false;
-            }
-
             if (member is IPropertySymbol property && !IsPropertySettable(property))
             {
                 context.ReportDiagnostic(Diagnostic.Create(

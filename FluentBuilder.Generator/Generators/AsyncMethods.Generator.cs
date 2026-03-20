@@ -45,16 +45,6 @@ namespace FluentBuilder.Generator.Generator
                 string methodName = MethodCache.GetAsyncMethodName(method);
                 string asyncMethodName = methodName + "Async";
 
-                if (!IdentifierCache.IsValidIdentifier(asyncMethodName))
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(
-                        Descriptor.InvalidFluentNameError,
-                        method.Locations.FirstOrDefault(),
-                        asyncMethodName,
-                        method.Name));
-                    continue;
-                }
-
                 // Generate signature including parameter types
                 string signature = StringCache.GetMethodSignature(method, asyncMethodName);
 

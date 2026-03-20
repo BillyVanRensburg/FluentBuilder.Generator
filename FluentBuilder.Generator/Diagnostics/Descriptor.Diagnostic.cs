@@ -21,17 +21,6 @@ namespace FluentBuilder.Generator.Diagnostics
         // ==================== ERROR CODES (FB001-FB020) ====================
 
         /// <summary>
-        /// FB008: Invalid fluent method name.
-        /// </summary>
-        public static readonly DiagnosticDescriptor InvalidFluentNameError = new DiagnosticDescriptor(
-            id: "FB008",
-            title: "Invalid fluent method name",
-            messageFormat: "Invalid fluent method name '{0}' for member '{1}'. Method names must be valid C# identifiers.",
-            category: "FluentBuilder",
-            DiagnosticSeverity.Error,
-            isEnabledByDefault: true);
-
-        /// <summary>
         /// FB009: Duplicate fluent method name.
         /// </summary>
         public static readonly DiagnosticDescriptor DuplicateMethodNameError = new DiagnosticDescriptor(
