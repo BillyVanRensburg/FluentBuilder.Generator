@@ -704,6 +704,50 @@ Without the attribute definitions, the FluentBuilder source generator cannot fun
   ```
 - If you are using a direct assembly reference, ensure it is correctly referenced.
 
+#### FBBLD013: Cannot generate builder for interface
+**Severity:** Error  
+**Category:** FluentBuilder  
+
+**Description:**  
+The `[FluentBuilder]` attribute is applied to an interface. Interfaces cannot be instantiated, so a builder cannot be generated.
+
+**How to fix:**  
+- Remove the `[FluentBuilder]` attribute from the interface.  
+- Apply the attribute to a concrete class that implements the interface if you need a builder for that implementation.
+
+#### FBBLD014: Cannot generate builder for enum
+**Severity:** Error  
+**Category:** FluentBuilder  
+
+**Description:**  
+The `[FluentBuilder]` attribute is applied to an enum. Enums are value types with a fixed set of values and cannot be constructed with a builder.
+
+**How to fix:**  
+- Remove the `[FluentBuilder]` attribute from the enum.  
+- If you need to configure a value of an enum type, the builder will already provide a method to set it directly.
+
+#### FBBLD015: Cannot generate builder for struct
+**Severity:** Error  
+**Category:** FluentBuilder  
+
+**Description:**  
+The `[FluentBuilder]` attribute is applied to a struct. While technically possible, structs are usually immutable and the builder pattern is less common for them. However, the generator does not support structs.
+
+**How to fix:**  
+- Remove the `[FluentBuilder]` attribute from the struct.  
+- Consider using a class instead if you need a builder.
+
+#### FBBLD016: Cannot generate builder for delegate
+**Severity:** Error  
+**Category:** FluentBuilder  
+
+**Description:**  
+The `[FluentBuilder]` attribute is applied to a delegate type. Delegates cannot be instantiated with a builder.
+
+**How to fix:**  
+- Remove the `[FluentBuilder]` attribute from the delegate.  
+- Use a lambda or method group directly where a delegate is needed.
+
 ### FluentName
 
 #### FBNAM001: Invalid fluent method name
