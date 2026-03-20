@@ -240,15 +240,6 @@ namespace FluentBuilder.Generator.Generator
                 // Generate signature including parameter types
                 string signature = StringCache.GetMethodSignature(method, methodName);
 
-                if (!fluentMethodNames.Add(signature))
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(
-                        Descriptor.DuplicateMethodNameError,
-                        method.Locations.FirstOrDefault(),
-                        methodName, builderName));
-                    continue;
-                }
-
                 GenerateMethodCall(sb, indent, builderName, method, methodName);
             }
         }

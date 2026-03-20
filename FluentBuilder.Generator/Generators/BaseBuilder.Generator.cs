@@ -72,15 +72,6 @@ namespace FluentBuilder.Generator.Generator
                 if (!TryValidateMemberName(member, baseName, context, out var memberType))
                     continue;
 
-                // For members (properties/fields), signature is just the name (no parameters)
-                if (!fluentSignatures.Add(baseName))
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(
-                        Descriptor.DuplicateMethodNameError,
-                        member.Locations.FirstOrDefault(),
-                        baseName, builderName));
-                }
-
                 // Get the field reference based on builder type
                 string fieldReference = isRecord ? $"_{member.Name}" : $"_instance.{member.Name}";
 
@@ -153,15 +144,6 @@ namespace FluentBuilder.Generator.Generator
                     string elementMethodName = $"Add{StringCache.GetSimpleTypeName(namedElement)}";
                     // Signature includes the Action<ElementBuilder> parameter
                     string elementSignature = $"{elementMethodName}(System.Action<{elementBuilderName}>)";
-
-                    // Check for duplicate method signature
-                    if (!fluentSignatures.Add(elementSignature))
-                    {
-                        context.ReportDiagnostic(Diagnostic.Create(
-                            Descriptor.DuplicateMethodNameError,
-                            member.Locations.FirstOrDefault(),
-                            elementMethodName, builderName));
-                    }
 
                     CodeGenerationHelper.EmitCollectionElementBuilder(
                         sb, indent, builderName, memberType, elementType, fieldReference, member.Name,

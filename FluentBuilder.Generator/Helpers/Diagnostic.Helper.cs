@@ -221,29 +221,5 @@ namespace FluentBuilder.Generator.Helpers
         {
             Report(context, Descriptor.UnsupportedTypeError, location, typeName);
         }
-
-        /// <summary>
-        /// Creates a diagnostic for a duplicate method name.
-        /// </summary>
-        /// <param name="methodName">The duplicate method name.</param>
-        /// <param name="className">The name of the class containing the duplicate.</param>
-        /// <param name="location">The location of the duplicate (may be null).</param>
-        /// <returns>A diagnostic instance.</returns>
-        public static Diagnostic CreateDuplicateMethodNameError(string methodName, string className, Location? location = null)
-        {
-            return Create(Descriptor.DuplicateMethodNameError, location, methodName, className);
-        }
-
-        /// <summary>
-        /// Reports a diagnostic for a duplicate method name.
-        /// </summary>
-        /// <param name="context">The source production context.</param>
-        /// <param name="methodName">The duplicate method name.</param>
-        /// <param name="className">The name of the class containing the duplicate.</param>
-        /// <param name="location">The location of the duplicate (may be null).</param>
-        public static void ReportDuplicateMethodNameError(SourceProductionContext context, string methodName, string className, Location? location = null)
-        {
-            Report(context, Descriptor.DuplicateMethodNameError, location, methodName, className);
-        }
     }
 }

@@ -720,6 +720,24 @@ The fluent method names generated for members must be valid C# identifiers (e.g.
 - Change the value in the `[FluentName]` attribute to a valid C# identifier (letters, digits, underscore, not starting with digit, not a keyword).  
 - If you intend to use a keyword, prefix it with `@` (e.g., `[FluentName("@class")]`). The analyzer accepts `@`-prefixed keywords as valid.
 
+#### FBNAM002: Duplicate fluent method name
+**Severity:** Error  
+**Category:** FluentName  
+
+**Description:**  
+Two or more members in a class decorated with `[FluentBuilder]` would produce the same fluent method name. This can happen when:
+- The same custom name is given to different members via `[FluentName]`.
+- A custom name collides with the default name of another member (e.g., after applying `MethodPrefix`/`MethodSuffix`).
+- A member name itself (or its default) collides with a built‑in builder method (e.g., `Build`, `Validate`).
+
+**Why this rule exists:**  
+The generated builder class must have unique method names. Duplicates would cause a compilation error.
+
+**How to fix:**  
+- Change the `[FluentName]` value for one of the conflicting members.  
+- If the conflict involves a default name, consider using `[FluentName]` to rename one of them.  
+- Avoid using names that are reserved for the builder’s own methods.
+
 ## Conclusion
 The FluentBuilder source generator provides a comprehensive, attribute‑driven way to create expressive, type‑safe builders for your C# types. With support for validation, async, collections, and deep customisation, it fits a wide range of scenarios.
 

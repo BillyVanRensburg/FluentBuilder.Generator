@@ -47,19 +47,7 @@ namespace FluentBuilder.Generator.Generator
 
                 // Generate signature including parameter types
                 string signature = StringCache.GetMethodSignature(method, asyncMethodName);
-
-                if (fluentMethodNames.Contains(signature))
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(
-                        Descriptor.DuplicateMethodNameError,
-                        method.Locations.FirstOrDefault(),
-                        asyncMethodName,
-                        builderName));
-                }
-                else
-                {
-                    fluentMethodNames.Add(signature);
-                }
+                fluentMethodNames.Add(signature);
 
                 AsyncExtensionsGenerator.GenerateAsyncFluentMethod(
                     sb, indent, builderName, method, asyncMethodName,

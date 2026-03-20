@@ -21,17 +21,6 @@ namespace FluentBuilder.Generator.Diagnostics
         // ==================== ERROR CODES (FB001-FB020) ====================
 
         /// <summary>
-        /// FB009: Duplicate fluent method name.
-        /// </summary>
-        public static readonly DiagnosticDescriptor DuplicateMethodNameError = new DiagnosticDescriptor(
-            id: "FB009",
-            title: "Duplicate fluent method name",
-            messageFormat: "Duplicate fluent method name '{0}' in class '{1}'. All fluent method names must be unique.",
-            category: "FluentBuilder",
-            DiagnosticSeverity.Error,
-            isEnabledByDefault: true);
-
-        /// <summary>
         /// FB010: Unsupported type for fluent builder.
         /// </summary>
         public static readonly DiagnosticDescriptor UnsupportedTypeError = new DiagnosticDescriptor(
