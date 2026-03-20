@@ -96,13 +96,6 @@ namespace FluentBuilder.Generator.Validators
             }
 
             var safeLocation = GetLocation(typeSymbol);
-
-            if (typeSymbol.TypeKind == TypeKind.Delegate || typeSymbol.TypeKind == TypeKind.Enum)
-            {
-                ReportError(Descriptor.UnsupportedTypeError, safeLocation, typeSymbol.Name);
-                return false;
-            }
-
             return true;
         }
 

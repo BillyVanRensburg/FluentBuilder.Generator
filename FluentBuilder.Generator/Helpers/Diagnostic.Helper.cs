@@ -199,27 +199,5 @@ namespace FluentBuilder.Generator.Helpers
         {
             Report(context, Descriptor.InternalGeneratorError, location, typeName, errorMessage);
         }
-
-        /// <summary>
-        /// Creates a diagnostic for an unsupported type.
-        /// </summary>
-        /// <param name="typeName">The name of the unsupported type.</param>
-        /// <param name="location">The location of the type (may be null).</param>
-        /// <returns>A diagnostic instance.</returns>
-        public static Diagnostic CreateUnsupportedTypeError(string typeName, Location? location = null)
-        {
-            return Create(Descriptor.UnsupportedTypeError, location, typeName);
-        }
-
-        /// <summary>
-        /// Reports a diagnostic for an unsupported type.
-        /// </summary>
-        /// <param name="context">The source production context.</param>
-        /// <param name="typeName">The name of the unsupported type.</param>
-        /// <param name="location">The location of the type (may be null).</param>
-        public static void ReportUnsupportedTypeError(SourceProductionContext context, string typeName, Location? location = null)
-        {
-            Report(context, Descriptor.UnsupportedTypeError, location, typeName);
-        }
     }
 }

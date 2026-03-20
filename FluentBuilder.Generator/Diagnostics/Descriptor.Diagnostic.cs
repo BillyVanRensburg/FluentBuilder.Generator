@@ -21,17 +21,6 @@ namespace FluentBuilder.Generator.Diagnostics
         // ==================== ERROR CODES (FB001-FB020) ====================
 
         /// <summary>
-        /// FB010: Unsupported type for fluent builder.
-        /// </summary>
-        public static readonly DiagnosticDescriptor UnsupportedTypeError = new DiagnosticDescriptor(
-            id: "FB010",
-            title: "Unsupported type for fluent builder",
-            messageFormat: "Type '{0}' is not supported for fluent builder generation. Type must be a non-static, non-abstract class or record.",
-            category: "FluentBuilder",
-            DiagnosticSeverity.Error,
-            isEnabledByDefault: true);
-
-        /// <summary>
         /// FB011: Invalid async method signature.
         /// </summary>
         public static readonly DiagnosticDescriptor AsyncMethodSignatureError = new DiagnosticDescriptor(
