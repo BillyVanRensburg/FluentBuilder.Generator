@@ -818,6 +818,23 @@ The generator creates an async validation method that invokes the validator. If 
 - Ensure the validation method is public, instance, returns `Task<bool>`, and takes exactly one parameter of the member's type (or optionally a second `CancellationToken` parameter).
 - Check the spelling of the method name and that the method exists.
 
+### FluentDefaultValue
+
+#### FBDEF001: Invalid default value type
+**Severity:** Error  
+**Category:** FluentDefaultValue  
+
+**Description:**  
+The value specified in the `[FluentDefaultValue]` attribute cannot be assigned to the target member’s type. This could be because the constant value is of a type that is not implicitly convertible to the member’s type (e.g., `[FluentDefaultValue("abc")]` on an `int` property).
+
+**Why this rule exists:**  
+The generated builder uses the provided default value to initialize the member. If the value is not compatible, the generated code will not compile.
+
+**How to fix:**  
+- Change the default value to a compatible type (e.g., use `[FluentDefaultValue(42)]` for an `int`).  
+- If the target type is nullable, you can also assign `null` as the default value.  
+- Ensure that the value matches the expected type exactly or can be implicitly converted (e.g., `int` to `long` is allowed).
+
 ## Conclusion
 The FluentBuilder source generator provides a comprehensive, attribute‑driven way to create expressive, type‑safe builders for your C# types. With support for validation, async, collections, and deep customisation, it fits a wide range of scenarios.
 

@@ -21,17 +21,6 @@ namespace FluentBuilder.Generator.Diagnostics
         // ==================== ERROR CODES (FB001-FB020) ====================
 
         /// <summary>
-        /// FB013: Invalid default value type.
-        /// </summary>
-        public static readonly DiagnosticDescriptor InvalidDefaultValueError = new DiagnosticDescriptor(
-            id: "FB013",
-            title: "Invalid default value type",
-            messageFormat: "Default value '{0}' for member '{1}' cannot be converted to type '{2}'",
-            category: "FluentBuilder",
-            DiagnosticSeverity.Error,
-            isEnabledByDefault: true);
-
-        /// <summary>
         /// FB014: Property has private setter.
         /// </summary>
         public static readonly DiagnosticDescriptor PrivateSetterWarning = new DiagnosticDescriptor(
