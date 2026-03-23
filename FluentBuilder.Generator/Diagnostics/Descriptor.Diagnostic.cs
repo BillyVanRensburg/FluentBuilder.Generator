@@ -21,17 +21,6 @@ namespace FluentBuilder.Generator.Diagnostics
         // ==================== ERROR CODES (FB001-FB020) ====================
 
         /// <summary>
-        /// FB018: FluentName is not a valid identifier.
-        /// </summary>
-        public static readonly DiagnosticDescriptor InvalidFluentNameIdentifierError = new DiagnosticDescriptor(
-            id: "FB018",
-            title: "FluentName is not a valid identifier",
-            messageFormat: "FluentName attribute on '{0}' has invalid value '{1}'. Name must be a valid C# identifier (letters, digits, underscore, cannot start with digit, not a keyword).",
-            category: "FluentBuilder",
-            DiagnosticSeverity.Error,
-            isEnabledByDefault: true);
-
-        /// <summary>
         /// FB019: Generator orchestrator not initialized.
         /// </summary>
         public static readonly DiagnosticDescriptor OrchestratorNotInitializedError = new DiagnosticDescriptor(

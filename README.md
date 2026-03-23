@@ -841,6 +841,21 @@ An empty or whitespace name would result in invalid generated code (e.g., a meth
 - Provide a meaningful, non‑empty name in the attribute, e.g., `[FluentName("SetAge")]`.  
 - If you do not want to rename the fluent method, remove the attribute entirely.
 
+#### FBNAM004: FluentName is not a valid identifier
+**Severity:** Error  
+**Category:** FluentName  
+
+**Description:**  
+The `[FluentName]` attribute specifies a name that is not a valid C# identifier. Valid identifiers consist of letters, digits, and underscores, cannot start with a digit, and must not be a C# keyword (unless prefixed with `@`).
+
+**Why this rule exists:**  
+The generated builder uses the provided name as a method or class name. If the name is not a valid C# identifier, the generated code will not compile.
+
+**How to fix:**  
+- Change the value to a valid C# identifier.  
+- If you need to use a keyword, prefix it with `@` (e.g., `[FluentName("@class")]`).  
+- Ensure the name is not empty (use `[FluentName]` with no argument to use the default name, or remove the attribute).
+
 ### FluentAsyncMethod
 
 #### FBAMD001: Invalid async method signature
