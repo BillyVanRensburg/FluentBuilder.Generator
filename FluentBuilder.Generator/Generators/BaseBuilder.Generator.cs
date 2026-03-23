@@ -98,15 +98,6 @@ namespace FluentBuilder.Generator.Generator
             if (memberType == null)
                 return false;
 
-            if (member is IPropertySymbol property && !IsPropertySettable(property))
-            {
-                context.ReportDiagnostic(Diagnostic.Create(
-                    property.SetMethod == null ? Descriptor.ReadOnlyPropertyWarning : Descriptor.PrivateSetterWarning,
-                    member.Locations.FirstOrDefault(),
-                    member.Name));
-                return false;
-            }
-
             return true;
         }
 

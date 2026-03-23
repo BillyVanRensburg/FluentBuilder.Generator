@@ -748,6 +748,21 @@ The `[FluentBuilder]` attribute is applied to a delegate type. Delegates cannot 
 - Remove the `[FluentBuilder]` attribute from the delegate.  
 - Use a lambda or method group directly where a delegate is needed.
 
+#### FBBLD017: Property has private setter
+**Severity:** Warning  
+**Category:** FluentBuilder  
+
+**Description:**  
+A public instance property in a class decorated with `[FluentBuilder]` has a private setter. The generated builder will not include a fluent method for this property, because it cannot set the value.
+
+**Why this rule exists:**  
+The builder’s fluent methods rely on public setters to assign values. If the setter is private, the generated code would not compile or would be inaccessible. This warning alerts you to the issue.
+
+**How to fix:**  
+- Make the setter public so the builder can use it.  
+- If you don’t need the property to be settable via the builder, add `[FluentIgnore]` to suppress the warning.  
+- Alternatively, consider using a constructor parameter or a factory method if the property is meant to be read‑only.
+
 ### FluentName
 
 #### FBNAM001: Invalid fluent method name

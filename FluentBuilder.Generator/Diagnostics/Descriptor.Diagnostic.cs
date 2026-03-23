@@ -21,17 +21,6 @@ namespace FluentBuilder.Generator.Diagnostics
         // ==================== ERROR CODES (FB001-FB020) ====================
 
         /// <summary>
-        /// FB014: Property has private setter.
-        /// </summary>
-        public static readonly DiagnosticDescriptor PrivateSetterWarning = new DiagnosticDescriptor(
-            id: "FB014",
-            title: "Property has private setter",
-            messageFormat: "Property '{0}' has a private setter. Builder methods won't be generated. Consider making the setter public or adding [Ignore] attribute.",
-            category: "FluentBuilder",
-            DiagnosticSeverity.Warning,
-            isEnabledByDefault: true);
-
-        /// <summary>
         /// FB015: Read-only property detected.
         /// </summary>
         public static readonly DiagnosticDescriptor ReadOnlyPropertyWarning = new DiagnosticDescriptor(
