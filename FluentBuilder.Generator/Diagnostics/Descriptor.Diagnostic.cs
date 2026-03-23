@@ -21,17 +21,6 @@ namespace FluentBuilder.Generator.Diagnostics
         // ==================== ERROR CODES (FB001-FB020) ====================
 
         /// <summary>
-        /// FB011: Invalid async method signature.
-        /// </summary>
-        public static readonly DiagnosticDescriptor AsyncMethodSignatureError = new DiagnosticDescriptor(
-            id: "FB011",
-            title: "Invalid async method signature",
-            messageFormat: "Async method '{0}' must return Task or Task<T>",
-            category: "FluentBuilder",
-            DiagnosticSeverity.Error,
-            isEnabledByDefault: true);
-
-        /// <summary>
         /// FB012: Invalid async validator.
         /// </summary>
         public static readonly DiagnosticDescriptor AsyncValidatorError = new DiagnosticDescriptor(

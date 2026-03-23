@@ -39,9 +39,6 @@ namespace FluentBuilder.Generator.Generator
                 if (!TypeHelper.ShouldIncludeMethod(method)) continue;
                 if (!MethodCache.IsAsyncMethod(method)) continue;
 
-                if (!validator.ValidateAsyncMethod(method))
-                    continue;
-
                 string methodName = MethodCache.GetAsyncMethodName(method);
                 string asyncMethodName = methodName + "Async";
 

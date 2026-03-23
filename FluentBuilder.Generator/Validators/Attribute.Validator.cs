@@ -153,29 +153,6 @@ namespace FluentBuilder.Generator.Validators
         }
 
         /// <summary>
-        /// Validates that an async method has a return type that contains "Task".
-        /// </summary>
-        /// <param name="method">The method symbol to validate.</param>
-        /// <returns>True if the method is a valid async method; otherwise false.</returns>
-        public bool ValidateAsyncMethod(IMethodSymbol method)
-        {
-            if (method == null)
-            {
-                ReportError(Descriptor.InternalGeneratorError, Location.None, "unknown", "Method symbol cannot be null");
-                return false;
-            }
-
-            var returnType = method.ReturnType.ToDisplayString();
-            if (!returnType.Contains("Task"))
-            {
-                var safeLocation = GetLocation(method);
-                ReportError(Descriptor.AsyncMethodSignatureError, safeLocation, method.Name);
-                return false;
-            }
-            return true;
-        }
-
-        /// <summary>
         /// Validates that an async validator type has a public parameterless constructor.
         /// </summary>
         /// <param name="validatorType">The validator type symbol.</param>

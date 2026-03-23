@@ -782,6 +782,23 @@ The generated builder class must have unique method names. Duplicates would caus
 - If the conflict involves a default name, consider using `[FluentName]` to rename one of them.  
 - Avoid using names that are reserved for the builder’s own methods.
 
+### FluentAsyncMethod
+
+#### FBAMD001: Invalid async method signature
+**Severity:** Error  
+**Category:** FluentAsyncMethod  
+
+**Description:**  
+A method in a type decorated with `[FluentBuilder]` is either marked as `async` or has the `[FluentAsyncMethod]` attribute, but its return type is not `Task` or `Task<T>`.  
+
+**Why this rule exists:**  
+The generator creates asynchronous builder methods for such methods. They must be awaitable, so they must return `Task` or `Task<T>`. Returning `void` or other types would cause compilation errors.
+
+**How to fix:**  
+- Change the method to return `Task` or `Task<T>`.  
+- If the method is not intended to be asynchronous, remove the `async` keyword or the `[FluentAsyncMethod]` attribute.  
+- If you need to return a value, wrap it in `Task<T>`.
+
 ## Conclusion
 The FluentBuilder source generator provides a comprehensive, attribute‑driven way to create expressive, type‑safe builders for your C# types. With support for validation, async, collections, and deep customisation, it fits a wide range of scenarios.
 
