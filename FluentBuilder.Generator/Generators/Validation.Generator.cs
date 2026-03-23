@@ -279,26 +279,8 @@ namespace FluentBuilder.Generator.Generator
             if (attr == null)
                 return;
 
-            if (attr.ConstructorArguments.Length < 2)
-            {
-                context.ReportDiagnostic(Diagnostic.Create(
-                    Descriptor.AsyncValidatorError,
-                    member.Locations.FirstOrDefault(),
-                    memberName));
-                return;
-            }
-
             var validatorType = attr.ConstructorArguments[0].Value as INamedTypeSymbol;
             var methodName = attr.ConstructorArguments[1].Value as string;
-
-            if (validatorType == null || string.IsNullOrEmpty(methodName))
-            {
-                context.ReportDiagnostic(Diagnostic.Create(
-                    Descriptor.AsyncValidatorError,
-                    member.Locations.FirstOrDefault(),
-                    memberName));
-                return;
-            }
 
             // Validate that the validator type has a public parameterless constructor
             if (validatorType is INamedTypeSymbol namedValidator)

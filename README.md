@@ -799,6 +799,25 @@ The generator creates asynchronous builder methods for such methods. They must b
 - If the method is not intended to be asynchronous, remove the `async` keyword or the `[FluentAsyncMethod]` attribute.  
 - If you need to return a value, wrap it in `Task<T>`.
 
+### FluentValidateAsync
+
+#### FBFVA001: Invalid async validator
+**Severity:** Error  
+**Category:** FluentValidateAsync  
+
+**Description:**  
+A member (property or field) in a type decorated with `[FluentBuilder]` uses the `[FluentValidateAsync]` attribute with an invalid configuration. This could be due to:
+- The specified validator type does not have a public parameterless constructor.
+- The specified validation method does not exist or has an incorrect signature.
+
+**Why this rule exists:**  
+The generator creates an async validation method that invokes the validator. If the validator is misconfigured, the generated code will not compile.
+
+**How to fix:**  
+- Ensure the validator type has a public parameterless constructor.
+- Ensure the validation method is public, instance, returns `Task<bool>`, and takes exactly one parameter of the member's type (or optionally a second `CancellationToken` parameter).
+- Check the spelling of the method name and that the method exists.
+
 ## Conclusion
 The FluentBuilder source generator provides a comprehensive, attribute‑driven way to create expressive, type‑safe builders for your C# types. With support for validation, async, collections, and deep customisation, it fits a wide range of scenarios.
 

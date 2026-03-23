@@ -21,17 +21,6 @@ namespace FluentBuilder.Generator.Diagnostics
         // ==================== ERROR CODES (FB001-FB020) ====================
 
         /// <summary>
-        /// FB012: Invalid async validator.
-        /// </summary>
-        public static readonly DiagnosticDescriptor AsyncValidatorError = new DiagnosticDescriptor(
-            id: "FB012",
-            title: "Invalid async validator",
-            messageFormat: "Async validator for '{0}' has invalid configuration",
-            category: "FluentBuilder",
-            DiagnosticSeverity.Error,
-            isEnabledByDefault: true);
-
-        /// <summary>
         /// FB013: Invalid default value type.
         /// </summary>
         public static readonly DiagnosticDescriptor InvalidDefaultValueError = new DiagnosticDescriptor(
