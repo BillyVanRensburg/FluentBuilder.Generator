@@ -21,17 +21,6 @@ namespace FluentBuilder.Generator.Diagnostics
         // ==================== ERROR CODES (FB001-FB020) ====================
 
         /// <summary>
-        /// FB017: FluentName cannot be empty.
-        /// </summary>
-        public static readonly DiagnosticDescriptor EmptyFluentNameError = new DiagnosticDescriptor(
-            id: "FB017",
-            title: "FluentName cannot be empty",
-            messageFormat: "FluentName attribute on '{0}' cannot have an empty or whitespace value. Value was: '{1}'.",
-            category: "FluentBuilder",
-            DiagnosticSeverity.Error,
-            isEnabledByDefault: true);
-
-        /// <summary>
         /// FB018: FluentName is not a valid identifier.
         /// </summary>
         public static readonly DiagnosticDescriptor InvalidFluentNameIdentifierError = new DiagnosticDescriptor(

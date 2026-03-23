@@ -827,6 +827,20 @@ The generated builder class must have unique method names. Duplicates would caus
 - If the conflict involves a default name, consider using `[FluentName]` to rename one of them.  
 - Avoid using names that are reserved for the builder’s own methods.
 
+#### FBNAM003: FluentName cannot be empty
+**Severity:** Error  
+**Category:** FluentName  
+
+**Description:**  
+The `[FluentName]` attribute is used with an empty string or a string containing only whitespace. This is not allowed because the fluent method or builder class name must be a non‑empty valid identifier.
+
+**Why this rule exists:**  
+An empty or whitespace name would result in invalid generated code (e.g., a method named `""`). The generator cannot produce a valid builder with such a name.
+
+**How to fix:**  
+- Provide a meaningful, non‑empty name in the attribute, e.g., `[FluentName("SetAge")]`.  
+- If you do not want to rename the fluent method, remove the attribute entirely.
+
 ### FluentAsyncMethod
 
 #### FBAMD001: Invalid async method signature

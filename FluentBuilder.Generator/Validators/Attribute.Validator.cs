@@ -55,24 +55,6 @@ namespace FluentBuilder.Generator.Validators
             var nameValue = nameAttr.ConstructorArguments.FirstOrDefault().Value as string;
             var safeLocation = location ?? Location.None;
 
-            if (nameValue == null)
-            {
-                ReportError(Descriptor.EmptyFluentNameError, safeLocation, symbolName, "null");
-                return false;
-            }
-
-            if (nameValue == string.Empty)
-            {
-                ReportError(Descriptor.EmptyFluentNameError, safeLocation, symbolName, "empty string");
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(nameValue))
-            {
-                ReportError(Descriptor.EmptyFluentNameError, safeLocation, symbolName, "whitespace");
-                return false;
-            }
-
             if (!TypeHelper.IsValidIdentifier(nameValue))
             {
                 ReportError(Descriptor.InvalidFluentNameIdentifierError, safeLocation, symbolName, nameValue);

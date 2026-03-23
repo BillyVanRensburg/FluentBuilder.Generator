@@ -45,15 +45,6 @@ namespace FluentBuilder.Generator.Validators
                     ? attr.ConstructorArguments[0].Value as string
                     : null;
 
-                if (nameValue == null)
-                    ReportError(Descriptor.EmptyFluentNameError, location, symbol.Name, "null");
-                else if (nameValue == string.Empty)
-                    ReportError(Descriptor.EmptyFluentNameError, location, symbol.Name, "empty string");
-                else if (string.IsNullOrWhiteSpace(nameValue))
-                    ReportError(Descriptor.EmptyFluentNameError, location, symbol.Name, "whitespace");
-                else if (!IdentifierCache.IsValidIdentifier(nameValue))
-                    ReportError(Descriptor.InvalidFluentNameIdentifierError, location, symbol.Name, nameValue);
-
                 break; // Only one FluentName attribute allowed
             }
         }
