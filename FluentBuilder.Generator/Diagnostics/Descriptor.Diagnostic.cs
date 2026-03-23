@@ -21,28 +21,6 @@ namespace FluentBuilder.Generator.Diagnostics
         // ==================== ERROR CODES (FB001-FB020) ====================
 
         /// <summary>
-        /// FB015: Read-only property detected.
-        /// </summary>
-        public static readonly DiagnosticDescriptor ReadOnlyPropertyWarning = new DiagnosticDescriptor(
-            id: "FB015",
-            title: "Read-only property detected",
-            messageFormat: "Property '{0}' is read-only. Builder methods won't be generated. Consider adding a setter or using [Ignore] attribute.",
-            category: "FluentBuilder",
-            DiagnosticSeverity.Warning,
-            isEnabledByDefault: true);
-
-        /// <summary>
-        /// FB016: Collection type without Add method.
-        /// </summary>
-        public static readonly DiagnosticDescriptor CollectionWithoutAddMethod = new DiagnosticDescriptor(
-            id: "FB016",
-            title: "Collection type without Add method",
-            messageFormat: "Type '{0}' appears to be a collection but doesn't have an Add method. Collection helper methods won't be generated.",
-            category: "FluentBuilder",
-            DiagnosticSeverity.Info,
-            isEnabledByDefault: true);
-
-        /// <summary>
         /// FB017: FluentName cannot be empty.
         /// </summary>
         public static readonly DiagnosticDescriptor EmptyFluentNameError = new DiagnosticDescriptor(

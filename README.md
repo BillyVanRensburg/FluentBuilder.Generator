@@ -763,6 +763,36 @@ The builder’s fluent methods rely on public setters to assign values. If the s
 - If you don’t need the property to be settable via the builder, add `[FluentIgnore]` to suppress the warning.  
 - Alternatively, consider using a constructor parameter or a factory method if the property is meant to be read‑only.
 
+#### FBBLD018: Read-only property detected
+**Severity:** Warning  
+**Category:** FluentBuilder  
+
+**Description:**  
+A public instance property in a type decorated with `[FluentBuilder]` is read‑only (has no setter). The generated builder cannot set such a property, so no fluent method will be created for it.
+
+**Why this rule exists:**  
+The builder pattern relies on setters to assign values. If a property is read‑only, it cannot be configured through the builder. This warning alerts you that the property will be ignored.
+
+**How to fix:**  
+- Add a public setter to the property if you want it to be configurable by the builder.  
+- If you do not need to configure the property, add the `[FluentIgnore]` attribute to suppress the warning.  
+- If the property is read‑only because it is computed from other properties, consider making it a method or using a different design.
+
+#### FBBLD019: Collection type without Add method
+**Severity:** Warning  
+**Category:** FluentBuilder  
+
+**Description:**  
+A property or field in a type decorated with `[FluentBuilder]` is of a type that appears to be a collection (e.g., implements `ICollection` or `ICollection<T>`), but the type does not have an accessible `Add` method. As a result, the generator will not create collection helper methods such as `AddItem`, `AddRange`, etc.
+
+**Why this rule exists:**  
+The generator can generate helpful methods for collections that support adding items. If the collection type lacks an `Add` method, those helper methods would not compile. This warning reminds you that you might need to use a different collection type or configure the property differently.
+
+**How to fix:**  
+- Use a collection type that has an `Add` method, such as `List<T>`, `ObservableCollection<T>`, or a custom type that implements `ICollection<T>` with an `Add` method.  
+- If you do not need the helper methods, you can ignore this warning.  
+- If the property is meant to be read‑only, consider using `[FluentIgnore]` to suppress the warning.
+
 ### FluentName
 
 #### FBNAM001: Invalid fluent method name
