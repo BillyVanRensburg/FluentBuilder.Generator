@@ -532,6 +532,20 @@ The FluentBuilder generator creates nested builder methods for properties whose 
 - Remove the circular reference by changing one of the properties to not use a nested builder (e.g., use a simple setter or a factory method).  
 - Redesign your types to break the cycle, for example by using an ID reference instead of a direct object reference.
 
+#### FBGEN002: Generator orchestrator not initialized
+**Severity:** Error  
+**Category:** General  
+
+**Description:**  
+This diagnostic indicates an internal error in the FluentBuilder generator. One common cause is that a nested builder type is not declared `partial`, preventing the generator from adding the builder code. All containing types of a type with `[FluentBuilder]` must also be `partial`.
+
+**Why this rule exists:**  
+The generator uses partial class features to inject the builder into the same type hierarchy. If any containing type is not partial, the generator cannot add the necessary code and will fail.
+
+**How to fix:**  
+- Ensure that every containing type (including the type itself, if it is nested) is declared with the `partial` modifier.  
+- For top‑level types, no `partial` is required.
+
 ### FluentBuilder
 
 #### FBBLD001: Invalid BuilderAccessibility for top-level type

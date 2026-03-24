@@ -21,17 +21,6 @@ namespace FluentBuilder.Generator.Diagnostics
         // ==================== ERROR CODES (FB001-FB020) ====================
 
         /// <summary>
-        /// FB019: Generator orchestrator not initialized.
-        /// </summary>
-        public static readonly DiagnosticDescriptor OrchestratorNotInitializedError = new DiagnosticDescriptor(
-            id: "FB019",
-            title: "Generator orchestrator not initialized",
-            messageFormat: "Generator orchestrator was not properly initialized for type '{0}'. This is an internal error in the FluentBuilder generator.",
-            category: "FluentBuilder",
-            DiagnosticSeverity.Error,
-            isEnabledByDefault: true);
-
-        /// <summary>
         /// FB020: Internal generator error.
         /// </summary>
         public static readonly DiagnosticDescriptor InternalGeneratorError = new DiagnosticDescriptor(
