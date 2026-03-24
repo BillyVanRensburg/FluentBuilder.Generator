@@ -175,29 +175,5 @@ namespace FluentBuilder.Generator.Helpers
         {
             Report(context, Descriptor.GenerationCancelled, location, typeName);
         }
-
-        /// <summary>
-        /// Creates a diagnostic for an internal generator error.
-        /// </summary>
-        /// <param name="typeName">The name of the type being generated.</param>
-        /// <param name="errorMessage">The error message.</param>
-        /// <param name="location">The location where the error occurred (may be null).</param>
-        /// <returns>A diagnostic instance.</returns>
-        public static Diagnostic CreateInternalGeneratorError(string typeName, string errorMessage, Location? location = null)
-        {
-            return Create(Descriptor.InternalGeneratorError, location, typeName, errorMessage);
-        }
-
-        /// <summary>
-        /// Reports a diagnostic for an internal generator error.
-        /// </summary>
-        /// <param name="context">The source production context.</param>
-        /// <param name="typeName">The name of the type being generated.</param>
-        /// <param name="errorMessage">The error message.</param>
-        /// <param name="location">The location where the error occurred (may be null).</param>
-        public static void ReportInternalGeneratorError(SourceProductionContext context, string typeName, string errorMessage, Location? location = null)
-        {
-            Report(context, Descriptor.InternalGeneratorError, location, typeName, errorMessage);
-        }
     }
 }

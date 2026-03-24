@@ -21,17 +21,6 @@ namespace FluentBuilder.Generator.Diagnostics
         // ==================== ERROR CODES (FB001-FB020) ====================
 
         /// <summary>
-        /// FB020: Internal generator error.
-        /// </summary>
-        public static readonly DiagnosticDescriptor InternalGeneratorError = new DiagnosticDescriptor(
-            id: "FB020",
-            title: "Internal generator error",
-            messageFormat: "Internal error generating builder for '{0}': {1}",
-            category: "FluentBuilder",
-            DiagnosticSeverity.Error,
-            isEnabledByDefault: true);
-
-        /// <summary>
         /// FB021: Type transformation error.
         /// </summary>
         public static readonly DiagnosticDescriptor TransformationError = new DiagnosticDescriptor(

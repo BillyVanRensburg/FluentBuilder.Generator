@@ -40,12 +40,6 @@ namespace FluentBuilder.Generator.Validators
         /// <returns>True if the FluentName attribute is valid or not present; otherwise false.</returns>
         public bool ValidateFluentName(ISymbol symbol, string symbolName, Location location)
         {
-            if (symbol == null)
-            {
-                ReportError(Descriptor.InternalGeneratorError, location ?? Location.None, "unknown", "Symbol cannot be null");
-                return false;
-            }
-
             var nameAttr = symbol.GetAttributes()
                 .FirstOrDefault(a => a.AttributeClass?.Name == Constant.AttributeName.FluentName);
 
@@ -65,12 +59,6 @@ namespace FluentBuilder.Generator.Validators
         /// <returns>True if the type is valid; otherwise false.</returns>
         public bool ValidateBuilderType(INamedTypeSymbol typeSymbol)
         {
-            if (typeSymbol == null)
-            {
-                ReportError(Descriptor.InternalGeneratorError, Location.None, "unknown", "Type symbol cannot be null");
-                return false;
-            }
-
             var safeLocation = GetLocation(typeSymbol);
             return true;
         }
@@ -82,12 +70,6 @@ namespace FluentBuilder.Generator.Validators
         /// <returns>True if an accessible constructor exists; otherwise false.</returns>
         public bool ValidateConstructorAccessibility(INamedTypeSymbol typeSymbol)
         {
-            if (typeSymbol == null)
-            {
-                ReportError(Descriptor.InternalGeneratorError, Location.None, "unknown", "Type symbol cannot be null");
-                return false;
-            }
-
             if (typeSymbol.IsRecord) return true;
 
             var hasAccessibleConstructor = typeSymbol.Constructors
@@ -105,26 +87,6 @@ namespace FluentBuilder.Generator.Validators
         /// <returns>True if no circular reference is detected; otherwise false.</returns>
         public bool ValidateNoCircularReference(string builderKey, HashSet<string> visitedBuilders, INamedTypeSymbol typeSymbol)
         {
-            if (string.IsNullOrEmpty(builderKey))
-            {
-                ReportError(Descriptor.InternalGeneratorError, GetLocation(typeSymbol),
-                    typeSymbol?.Name ?? "unknown", "Builder key cannot be null or empty");
-                return false;
-            }
-
-            if (visitedBuilders == null)
-            {
-                ReportError(Descriptor.InternalGeneratorError, GetLocation(typeSymbol),
-                    typeSymbol?.Name ?? "unknown", "Visited builders set cannot be null");
-                return false;
-            }
-
-            if (typeSymbol == null)
-            {
-                ReportError(Descriptor.InternalGeneratorError, Location.None, "unknown", "Type symbol cannot be null");
-                return false;
-            }
-
             return true;
         }
 
@@ -136,12 +98,6 @@ namespace FluentBuilder.Generator.Validators
         /// <returns>True if the validator is valid; otherwise false.</returns>
         public bool ValidateAsyncValidator(INamedTypeSymbol validatorType, Location location)
         {
-            if (validatorType == null)
-            {
-                ReportError(Descriptor.InternalGeneratorError, location ?? Location.None, "unknown", "Validator type cannot be null");
-                return false;
-            }
-
             var hasParameterlessCtor = validatorType.Constructors.Any(c =>
                 c.Parameters.Length == 0 && c.DeclaredAccessibility == Accessibility.Public);
 
@@ -365,18 +321,7 @@ namespace FluentBuilder.Generator.Validators
             validatorType = null;
             methodName = null;
 
-            if (attr.ConstructorArguments.Length == 0)
-            {
-                ReportError(Descriptor.InternalGeneratorError, location, "unknown", "Missing constructor argument for FluentValidateWith");
-                return false;
-            }
-
             validatorType = attr.ConstructorArguments[0].Value as ITypeSymbol;
-            if (validatorType == null)
-            {
-                ReportError(Descriptor.InternalGeneratorError, location, "unknown", "Validator type could not be resolved");
-                return false;
-            }
 
             methodName = AttributeCache.GetNamedArgument<string>(attr, "MethodName") ?? "Validate";
 
@@ -389,11 +334,6 @@ namespace FluentBuilder.Generator.Validators
                     ReportError(Descriptor.ThirdPartyValidatorMissingConstructor, location, namedValidator.Name);
                     return false;
                 }
-            }
-            else
-            {
-                ReportError(Descriptor.InternalGeneratorError, location, "unknown", "Validator type is not a named type");
-                return false;
             }
 
             var methods = validatorType.GetMembers(methodName).OfType<IMethodSymbol>()

@@ -183,17 +183,17 @@ namespace FluentBuilder.Generator
                         location);
                     GeneratorLogger.LogException(ex, $"Cycle detected: {ex.Message}");
                 }
-                catch (Exception ex)
-                {
-                    var location = typeInfo.TypeSymbol.Locations.FirstOrDefault() ?? Location.None;
-                    GeneratorLogger.LogError(
-                        sourceProductionContext,
-                        Descriptor.InternalGeneratorError,
-                        location,
-                        typeInfo.TypeSymbol.Name,
-                        ex.Message);
-                    GeneratorLogger.LogException(ex, $"Internal error generating builder for {typeInfo.TypeSymbol.Name}");
-                }
+                //catch (Exception ex)
+                //{
+                //    var location = typeInfo.TypeSymbol.Locations.FirstOrDefault() ?? Location.None;
+                //    GeneratorLogger.LogError(
+                //        sourceProductionContext,
+                //        Descriptor.InternalGeneratorError,
+                //        location,
+                //        typeInfo.TypeSymbol.Name,
+                //        ex.Message);
+                //    GeneratorLogger.LogException(ex, $"Internal error generating builder for {typeInfo.TypeSymbol.Name}");
+                //}
             });
         }
 

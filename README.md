@@ -546,6 +546,20 @@ The generator uses partial class features to inject the builder into the same ty
 - Ensure that every containing type (including the type itself, if it is nested) is declared with the `partial` modifier.  
 - For top‑level types, no `partial` is required.
 
+#### FBGEN003: Internal generator error
+**Severity:** Error  
+**Category:** General  
+
+**Description:**  
+This diagnostic is a placeholder for internal errors that may occur during the builder generation process. It is currently not emitted by any analyzer; it is reserved for future use when specific problematic patterns can be detected statically.
+
+**Why this rule exists:**  
+The generator may encounter scenarios where it cannot produce valid code (e.g., conflicts between record primary constructor parameters and properties). This analyzer can be extended to give early warnings about such patterns.
+
+**How to fix:**  
+- If this diagnostic appears, it indicates a bug in the generator. Please report it.  
+- Avoid using patterns that are known to cause conflicts, such as naming a property the same as a record primary constructor parameter. If the property is not intended to be configurable via the builder, consider using `[FluentIgnore]` on it.
+
 ### FluentBuilder
 
 #### FBBLD001: Invalid BuilderAccessibility for top-level type
